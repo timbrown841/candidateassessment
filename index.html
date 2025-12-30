@@ -38,6 +38,24 @@
       <p id="registerError" class="text-red-600 mt-2 hidden">❌ All fields are required or user already exists</p>
     </div>
 
+    <!-- 🎯 Role Selection -->
+    <div id="roleSelection" class="hidden">
+      <h2 class="text-xl font-semibold mb-4">Select Job Role</h2>
+      <select id="roleDropdown" class="w-full p-2 mb-4 border rounded">
+        <option value="">-- Choose a role --</option>
+    <option value="Infrastructure Engineer">Infrastructure Engineer</option>
+    <option value="Cloud Engineer">Cloud Engineer</option>
+    <option value="Network Engineer">Network Engineer</option>
+    <option value="DevOps Engineer">DevOps Engineer</option>
+    <option value="IT Help Desk Analyst">IT Help Desk Analyst</option>
+  </select>
+  <button onclick="startAssessment()" class="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700">
+    Start Assessment
+  </button>
+  <p id="roleError" class="text-red-600 mt-2 hidden">❌ Please select a role</p>
+</div>
+
+
     <!-- 📋 Assessment Form (hidden until login) -->
     <div id="assessmentSection" class="hidden">
       <h2 class="text-xl font-semibold mb-4">Assessment</h2>
@@ -51,9 +69,8 @@
     </div>
   </div>
 
-  <script>
 <script>
-  const API_BASE_URL = 'https://candidate-assessment-backend.onrender.com';
+  const API_BASE_URL = 'https://candidateassessment.onrender.com';
   let currentUser = null;
   let selectedRole = "";
 
@@ -265,10 +282,13 @@
       resultDiv.innerHTML = `<p class="text-red-600 mt-4">❌ There was an error submitting your assessment.</p>`;
     });
   });
+
+  <div class="text-center mb-4">
+  <a href="pricing.html" class="text-blue-600 hover:underline">Pricing</a>
+</div>
+
 </script>
-
-<a href="pricing.html" class="text-blue-600 hover:underline">Pricing</a>
-
 </body>
 </html>
+
 
