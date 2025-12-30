@@ -6,21 +6,19 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
-  <div class="max-w-2xl mx-auto bg-white rounded shadow-md p-6">
-    <h1 class="text-2xl font-bold text-center mb-6">Candidate Portal</h1>
+  <div class="card container">
+    <h1 class="centered mb-4">Candidate Portal</h1>
 
     <!-- 🔐 Login Form -->
     <div id="loginForm">
       <h2 class="text-xl font-semibold mb-4">Login</h2>
-      <input type="email" id="loginEmail" placeholder="Email" class="w-full mb-3 p-2 border rounded" />
-      <input type="password" id="loginPassword" placeholder="Password" class="w-full mb-4 p-2 border rounded" />
-      <button onclick="handleLogin()" class="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700">
-        Login
-      </button>
+      <input type="email" id="loginEmail" placeholder="Email"/>
+      <input type="password" id="loginPassword" placeholder="Password"/>
+      <button onclick="handleLogin()">Login</button>Login</button>
       <p class="mt-4 text-sm text-center">Don't have an account?
         <a href="#" onclick="showRegister()" class="text-blue-600 hover:underline">Register here</a>
       </p>
-      <p id="loginError" class="text-red-600 mt-2 hidden">❌ Invalid login credentials</p>
+      <p id="loginError" class="alert-error hidden">❌ Invalid login credentials</p>
     </div>
 
     <!-- 📝 Registration Form -->
@@ -41,7 +39,7 @@
     <!-- 🎯 Role Selection -->
     <div id="roleSelection" class="hidden">
       <h2 class="text-xl font-semibold mb-4">Select Job Role</h2>
-      <select id="roleDropdown" class="w-full p-2 mb-4 border rounded">
+      <select id="roleDropdown">
         <option value="">-- Choose a role --</option>
     <option value="Infrastructure Engineer">Infrastructure Engineer</option>
     <option value="Cloud Engineer">Cloud Engineer</option>
@@ -49,9 +47,7 @@
     <option value="DevOps Engineer">DevOps Engineer</option>
     <option value="IT Help Desk Analyst">IT Help Desk Analyst</option>
   </select>
-  <button onclick="startAssessment()" class="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700">
-    Start Assessment
-  </button>
+  <button>Start Assessment</button>Start Assessment</button>
   <p id="roleError" class="text-red-600 mt-2 hidden">❌ Please select a role</p>
 </div>
 
@@ -60,9 +56,7 @@
       <h2 class="text-xl font-semibold mb-4">Assessment</h2>
       <form id="assessmentForm" class="space-y-6">
         <div id="questions" class="space-y-4"></div>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Submit Assessment
-        </button>
+        <button type="submit">Submit Assessment</button>
       </form>
       <div id="result" class="mt-6 text-lg font-medium"></div>
     </div>
@@ -289,12 +283,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
