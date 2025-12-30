@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Candidate Assessment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen p-6 bg-gray-100">
+  <div class="max-w-2xl mx-auto bg-white rounded shadow-md p-6">
+    <h1 class="text-2xl font-bold text-center mb-6">Candidate Portal</h1>
+
+    <!-- 🔐 Login Form -->
+    <div id="loginForm">
+      <h2 class="text-xl font-semibold mb-4">Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email" class="w-full mb-3 p-2 border rounded" />
+      <input type="password" id="loginPassword" placeholder="Password" class="w-full mb-4 p-2 border rounded" />
+      <button onclick="handleLogin()" class="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700">
+        Login
+      </button>
+      <p class="mt-4 text-sm text-center">Don't have an account?
+        <a href="#" onclick="showRegister()" class="text-blue-600 hover:underline">Register here</a>
+      </p>
+      <p id="loginError" class="text-red-600 mt-2 hidden">❌ Invalid login credentials</p>
+    </div>
+
+    <!-- 📝 Registration Form -->
+    <div id="registerForm" class="hidden">
+      <h2 class="text-xl font-semibold mb-4">Register</h2>
+      <input type="text" id="registerName" placeholder="Full Name" class="w-full mb-3 p-2 border rounded" />
+      <input type="email" id="registerEmail" placeholder="Email" class="w-full mb-3 p-2 border rounded" />
+      <input type="password" id="registerPassword" placeholder="Password" class="w-full mb-4 p-2 border rounded" />
+      <button onclick="handleRegister()" class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">
+        Register
+      </button>
+      <p class="mt-4 text-sm text-center">Already have an account?
+        <a href="#" onclick="showLogin()" class="text-blue-600 hover:underline">Login here</a>
+      </p>
+      <p id="registerError" class="text-red-600 mt-2 hidden">❌ All fields are required or user already exists</p>
+    </div>
+
+    <!-- 📋 Assessment Form (hidden until login) -->
+    <div id="assessmentSection" class="hidden">
+      <h2 class="text-xl font-semibold mb-4">Assessment</h2>
+      <form id="assessmentForm" class="space-y-6">
+        <div id="questions" class="space-y-4"></div>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Submit Assessment
+        </button>
+      </form>
+      <div id="result" class="mt-6 text-lg font-medium"></div>
+    </div>
+  </div>
+
+  <script>
+<script>
+  const API_BASE_URL = 'https://candidate-assessment-backend.onrender.com';
+  let currentUser = null;
+  let selectedRole = "";
+
+  // Sample question sets (10 per role)
+  const questionBank = {
+    "Infrastructure Engineer": [
+      { type: "mcq", question: "Which RAID level provides mirroring?", options: ["RAID 0", "RAID 1", "RAID 5", "RAID 10"], answer: "RAID 1" },
+      { type: "written", question: "Explain how Group Policy can enforce security settings." },
+      { type: "mcq", question: "What is the function of Active Directory?", options: ["Web hosting", "User and resource management", "Firewall rules", "Antivirus deployment"], answer: "User and resource management" },
+      { type: "written", question: "Describe the steps to deploy Windows using WDS." },
+      { type: "mcq", question: "Which port does RDP use?", options: ["3389", "22", "443", "8080"], answer: "3389" },
+      { type: "mcq", question: "What command checks disk integrity in Windows?", options: ["ipconfig", "ping", "chkdsk", "tasklist"], answer: "chkdsk" },
+      { type: "written", question: "How do you backup domain controllers?" },
+      { type: "mcq", question: "What does DNS do?", options: ["Encrypts traffic", "Translates domain names to IPs", "Routes traffic", "Hosts websites"], answer: "Translates domain names to IPs" },
+      { type: "mcq", question: "Which protocol is used to sync time in a domain?", options: ["NTP", "SMTP", "SNMP", "FTP"], answer: "NTP" },
+      { type: "written", question: "List the steps to create a shared network folder with permissions." }
+    ],
+    "Cloud Engineer": [
+      { type: "mcq", question: "Which service manages Azure VMs?", options: ["Azure Monitor", "Azure VM Scale Sets", "Azure Resource Manager", "Azure Backup"], answer: "Azure Resource Manager" },
+      { type: "written", question: "Explain the difference between IaaS, PaaS, and SaaS." },
+      { type: "mcq", question: "What is the default Azure region for new resources?", options: ["East US", "West Europe", "Depends on tenant setup", "Global"], answer: "Depends on tenant setup" },
+      { type: "written", question: "Describe how to create a custom VNet in AWS or Azure." },
+      { type: "mcq", question: "Which service is used to monitor Azure resources?", options: ["Azure Advisor", "Azure Monitor", "Log Analytics", "Key Vault"], answer: "Azure Monitor" },
+      { type: "mcq", question: "What is Terraform used for?", options: ["Resource monitoring", "Infrastructure as code", "Logging", "Patching"], answer: "Infrastructure as code" },
+      { type: "written", question: "Describe the process of setting up an Azure Function." },
+      { type: "mcq", question: "Which AWS service allows container orchestration?", options: ["EC2", "ECS", "Lambda", "CloudTrail"], answer: "ECS" },
+      { type: "mcq", question: "Which Azure service provides secret storage?", options: ["Azure Secrets", "Key Vault", "Azure Safe", "Vault Lock"], answer: "Key Vault" },
+      { type: "written", question: "What steps do you take to secure cloud storage buckets?" }
+    ],
+    "Network Engineer": [
+      { type: "mcq", question: "What layer of the OSI model does a switch operate on?", options: ["1", "2", "3", "4"], answer: "2" },
+      { type: "written", question: "Describe the use of VLANs in network segmentation." },
+      { type: "mcq", question: "Which device provides NAT?", options: ["Switch", "Router", "Access Point", "Hub"], answer: "Router" },
+      { type: "written", question: "Explain how OSPF differs from RIP." },
+      { type: "mcq", question: "What does `traceroute` help diagnose?", options: ["DNS failures", "Path latency", "Bandwidth issues", "Encryption"], answer: "Path latency" },
+      { type: "mcq", question: "Which protocol uses port 161?", options: ["SMTP", "SNMP", "DNS", "RDP"], answer: "SNMP" },
+      { type: "written", question: "How do you configure a Cisco switch port for trunking?" },
+      { type: "mcq", question: "Which cable type is used for 1 Gbps Ethernet?", options: ["Cat3", "Cat5e", "Cat7", "Fiber"], answer: "Cat5e" },
+      { type: "mcq", question: "What’s the purpose of ARP?", options: ["Resolve MAC from IP", "Assign IP", "Send packets", "Encrypt traffic"], answer: "Resolve MAC from IP" },
+      { type: "written", question: "How do you troubleshoot IP conflicts on a LAN?" }
+    ],
+    "DevOps Engineer": [
+      { type: "mcq", question: "Which tool is used for continuous integration?", options: ["Ansible", "Jenkins", "Docker", "Nagios"], answer: "Jenkins" },
+      { type: "written", question: "Describe the steps to create a CI/CD pipeline in GitHub Actions." },
+      { type: "mcq", question: "What is the primary use of Kubernetes?", options: ["Database backup", "App orchestration", "Firewalling", "CI/CD"], answer: "App orchestration" },
+      { type: "written", question: "How do you create and manage Docker images?" },
+      { type: "mcq", question: "What does IaC stand for?", options: ["Internet and Cloud", "Infrastructure as Code", "Instance Allocation Control", "Internal access Cloud"], answer: "Infrastructure as Code" },
+      { type: "mcq", question: "Which command shows running containers in Docker?", options: ["docker list", "docker ps", "docker run", "docker monitor"], answer: "docker ps" },
+      { type: "written", question: "Explain how Terraform handles state files." },
+      { type: "mcq", question: "What does a YAML file define in GitHub Actions?", options: ["Workflow", "UI", "Metrics", "Firewall"], answer: "Workflow" },
+      { type: "mcq", question: "What is the main purpose of Prometheus?", options: ["CI/CD", "Monitoring", "Cloud storage", "Encryption"], answer: "Monitoring" },
+      { type: "written", question: "What tools do you use for log aggregation and visualization?" }
+    ],
+    "IT Help Desk Analyst": [
+      { type: "mcq", question: "What is the first step in troubleshooting?", options: ["Escalate", "Identify the issue", "Replace device", "Restart system"], answer: "Identify the issue" },
+      { type: "written", question: "Describe a time you resolved a user’s login problem." },
+      { type: "mcq", question: "Which command checks connectivity in Windows?", options: ["netstat", "ipconfig", "ping", "dir"], answer: "ping" },
+      { type: "written", question: "Explain how to reset a user’s password in Active Directory." },
+      { type: "mcq", question: "What does 'least privilege' mean?", options: ["Everyone gets admin", "No one gets access", "Only necessary permissions", "Group-wide access"], answer: "Only necessary permissions" },
+      { type: "mcq", question: "Which tool allows remote desktop access?", options: ["Word", "RDP", "Excel", "Teams"], answer: "RDP" },
+      { type: "written", question: "How do you handle a ticket for a slow-performing computer?" },
+      { type: "mcq", question: "Which file extension is for batch scripts?", options: [".sh", ".bat", ".ps1", ".cmd"], answer: ".bat" },
+      { type: "mcq", question: "Which Microsoft tool helps deploy software remotely?", options: ["WSUS", "Intune", "OneDrive", "Visio"], answer: "Intune" },
+      { type: "written", question: "How would you onboard a new user with email, laptop, and access setup?" }
+    ]
+  };
+
+  function showRegister() {
+    document.getElementById("loginForm").classList.add("hidden");
+    document.getElementById("registerForm").classList.remove("hidden");
+  }
+
+  function showLogin() {
+    document.getElementById("registerForm").classList.add("hidden");
+    document.getElementById("loginForm").classList.remove("hidden");
+  }
+
+  function handleRegister() {
+    const name = document.getElementById("registerName").value.trim();
+    const email = document.getElementById("registerEmail").value.trim().toLowerCase();
+    const password = document.getElementById("registerPassword").value.trim();
+    const error = document.getElementById("registerError");
+
+    if (!name || !email || !password) {
+      error.classList.remove("hidden");
+      return;
+    }
+
+    fetch(`${API_BASE_URL}/api/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    })
+    .then(res => res.ok ? res.json() : Promise.reject())
+    .then(() => {
+      alert('✅ Registration successful. Please log in.');
+      showLogin();
+    })
+    .catch(() => {
+      error.classList.remove("hidden");
+    });
+  }
+
+  function handleLogin() {
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value.trim();
+    const error = document.getElementById("loginError");
+
+    fetch(`${API_BASE_URL}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    })
+    .then(res => res.ok ? res.json() : Promise.reject())
+    .then(data => {
+      currentUser = data.user;
+      error.classList.add("hidden");
+      document.getElementById("loginForm").classList.add("hidden");
+      document.getElementById("roleSelection").classList.remove("hidden");
+    })
+    .catch(() => {
+      error.classList.remove("hidden");
+    });
+  }
+
+  function startAssessment() {
+    const role = document.getElementById("roleDropdown").value;
+    const error = document.getElementById("roleError");
+    if (!role) {
+      error.classList.remove("hidden");
+      return;
+    }
+    error.classList.add("hidden");
+    selectedRole = role;
+    loadQuestions(questionBank[role]);
+    document.getElementById("roleSelection").classList.add("hidden");
+    document.getElementById("assessmentSection").classList.remove("hidden");
+  }
+
+  function loadQuestions(questions) {
+    const container = document.getElementById("questions");
+    container.innerHTML = '';
+    questions.forEach((q, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'p-4 border rounded';
+      const title = document.createElement('p');
+      title.className = 'font-semibold mb-2';
+      title.textContent = `${index + 1}. ${q.question}`;
+      wrapper.appendChild(title);
+      if (q.type === "mcq") {
+        q.options.forEach(opt => {
+          const label = document.createElement('label');
+          label.className = 'block mb-1';
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = `q${index}`;
+          radio.value = opt;
+          radio.className = 'mr-2';
+          label.appendChild(radio);
+          label.appendChild(document.createTextNode(opt));
+          wrapper.appendChild(label);
+        });
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.name = `q${index}`;
+        textarea.className = 'w-full p-2 border border-gray-300 rounded';
+        wrapper.appendChild(textarea);
+      }
+      container.appendChild(wrapper);
+    });
+  }
+
+  document.getElementById("assessmentForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const resultDiv = document.getElementById("result");
+    const questions = questionBank[selectedRole];
+
+    let score = 0, total = 0;
+    const responses = questions.map((q, index) => {
+      const input = document.forms["assessmentForm"].elements[`q${index}`];
+      const value = input?.value || input?.querySelector?.('textarea')?.value || '';
+      if (q.type === "mcq") {
+        total++;
+        if (value === q.answer) score++;
+      }
+      return { question: q.question, type: q.type, answer: value };
+    });
+
+    fetch(`${API_BASE_URL}/api/submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: currentUser.name,
+        email: currentUser.email,
+        role: selectedRole,
+        responses
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      resultDiv.innerHTML = `
+        <div class="p-4 bg-green-100 border-l-4 border-green-600">
+          You scored <strong>${score}</strong> out of <strong>${total}</strong> on the multiple-choice section.
+        </div>
+        <p class="mt-2 text-green-600">${data.message}</p>
+      `;
+    })
+    .catch(() => {
+      resultDiv.innerHTML = `<p class="text-red-600 mt-4">❌ There was an error submitting your assessment.</p>`;
+    });
+  });
+</script>
+
+<a href="pricing.html" class="text-blue-600 hover:underline">Pricing</a>
+
+</body>
+</html>
+

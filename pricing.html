@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing – Candidate Assessment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <header class="bg-white shadow py-4 mb-8">
+    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Candidate Assessment</h1>
+      <nav>
+        <a href="index.html" class="text-blue-600 hover:underline">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-10">Simple, Transparent Pricing</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+
+        <!-- Starter Plan -->
+        <div class="bg-white p-8 rounded shadow-md">
+          <h3 class="text-xl font-semibold mb-4">Starter</h3>
+          <p class="text-4xl font-bold mb-4">$49<span class="text-lg font-medium">/month</span></p>
+          <ul class="space-y-2 mb-6 text-sm">
+            <li>✅ 1 Job Role</li>
+            <li>✅ Up to 50 Candidates/Month</li>
+            <li>❌ No Custom Branding</li>
+            <li>❌ No Advanced Reports</li>
+            <li>✅ Email Support</li>
+          </ul>
+          <button onclick="startCheckout('starter')" class="block bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Start Starter Plan</button>
+        </div>
+
+        <!-- Professional Plan -->
+        <div class="bg-white p-8 rounded shadow-md border-2 border-blue-600">
+          <h3 class="text-xl font-semibold mb-4 text-blue-600">Professional</h3>
+          <p class="text-4xl font-bold mb-4">$149<span class="text-lg font-medium">/month</span></p>
+          <ul class="space-y-2 mb-6 text-sm">
+            <li>✅ 5 Job Roles</li>
+            <li>✅ Up to 500 Candidates/Month</li>
+            <li>✅ Custom Branding</li>
+            <li>✅ Basic Reporting</li>
+            <li>✅ Priority Support</li>
+          </ul>
+          <button onclick="startCheckout('professional')" class="block bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Start Professional Plan</button>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="bg-white p-8 rounded shadow-md">
+          <h3 class="text-xl font-semibold mb-4">Enterprise</h3>
+          <p class="text-4xl font-bold mb-4">Custom</p>
+          <ul class="space-y-2 mb-6 text-sm">
+            <li>✅ Unlimited Roles</li>
+            <li>✅ Unlimited Candidates</li>
+            <li>✅ Advanced Analytics</li>
+            <li>✅ White-label Branding</li>
+            <li>✅ SLA & API/SSO Support</li>
+          </ul>
+          <button onclick="startCheckout('enterprise')" class="block bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Start Enterprise Plan</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-white border-t py-6 mt-10">
+    <div class="text-center text-sm text-gray-500">
+      © 2025 Candidate Assessment Platform. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    async function startCheckout(plan) {
+      try {
+        const response = await fetch('https://candidate-assessment-backend.onrender.com/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan })
+        });
+
+        const data = await response.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('Checkout failed. Please try again.');
+        }
+      } catch (error) {
+        console.error('Checkout error:', error);
+        alert('Something went wrong.');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Submissions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-6 bg-gray-100 min-h-screen">
+  <h1 class="text-2xl font-bold mb-4">Admin Panel</h1>
+
+  <!-- 🔐 Login Form -->
+  <div id="login" class="max-w-md bg-white p-6 rounded shadow mx-auto mt-12">
+    <h2 class="text-xl mb-4 font-semibold">Login Required</h2>
+    <input type="text" id="username" placeholder="Username"
+           autocapitalize="off" autocomplete="off"
+           class="block w-full mb-3 p-2 border rounded" />
+    <input type="password" id="password" placeholder="Password"
+           autocapitalize="off" autocomplete="off"
+           class="block w-full mb-4 p-2 border rounded" />
+    <button onclick="checkLogin()"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">
+      Login
+    </button>
+    <p id="login-error" class="text-red-600 mt-3 hidden">❌ Invalid credentials</p>
+  </div>
+
+  <!-- 📋 Submissions Display -->
+  <div id="submissions-container" class="space-y-4 text-sm text-gray-800 mt-8 hidden">
+    <h2 class="text-xl font-semibold mb-4">Submitted Assessments</h2>
+    <div id="submissions">Loading...</div>
+  </div>
+
+  <script>
+    const USERNAME = 'admin';
+    const PASSWORD = 'pass123';
+
+    function checkLogin() {
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+      const error = document.getElementById('login-error');
+
+      if (u === USERNAME && p === PASSWORD) {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('submissions-container').classList.remove('hidden');
+        loadSubmissions();
+      } else {
+        error.classList.remove('hidden');
+      }
+    }
+
+    function loadSubmissions() {
+      fetch('https://candidate-assessment-backend.onrender.com/api/submissions')
+        .then(res => {
+          if (!res.ok) throw new Error("Network response was not ok");
+          return res.json();
+        })
+        .then(data => {
+          const container = document.getElementById('submissions');
+          container.innerHTML = '';
+
+          if (data.length === 0) {
+            container.textContent = 'No submissions found.';
+            return;
+          }
+
+          data.forEach(entry => {
+            const box = document.createElement('div');
+            box.className = "bg-white border border-gray-200 p-4 rounded shadow";
+
+            box.innerHTML = `
+              <p><strong>Name:</strong> ${entry.name}</p>
+              <p><strong>Email:</strong> ${entry.email}</p>
+              <p><strong>Date:</strong> ${new Date(entry.submittedAt).toLocaleString()}</p>
+              <hr class="my-2 border-gray-300">
+              <div class="space-y-2">
+                ${entry.responses.map(r =>
+                  `<div>
+                    <p class="font-semibold">Q: ${r.question}</p>
+                    <p class="ml-2">A: ${r.answer || 'No answer'}</p>
+                  </div>`
+                ).join('')}
+              </div>
+            `;
+
+            container.appendChild(box);
+          });
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById('submissions').textContent = 'Error loading data.';
+        });
+    }
+  </script>
+</body>
+</html>
