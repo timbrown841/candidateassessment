@@ -1,17 +1,16 @@
-require('dotenv').config();
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const app = express(); // ✅ Moved here before app.use()
+
+require('dotenv').config();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-const app = express();   // ✅ app is created HERE
-
-app.use(cors({          // 2️⃣ middleware
+// 2️⃣ middleware
+app.use(cors({
   origin: 'https://timbrown841.github.io'
 }));
-
-app.use(express.json());  // 3️⃣ middleware
+app.use(express.json()); 
 
 // ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
@@ -111,8 +110,8 @@ app.post('/api/checkout', async (req, res) => {
           quantity: 1
         }
       ],
-      success_url: 'https://your-frontend-domain.com/success.html',
-      cancel_url: 'https://your-frontend-domain.com/cancel.html'
+      success_url: 'https://timbrown841.github.io/candidateassessment/success.html',
+      cancel_url: 'https://timbrown841.github.io/candidateassessment/cancel.html'
     });
 
     res.json({ url: session.url });
@@ -154,6 +153,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
