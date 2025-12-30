@@ -70,7 +70,7 @@
             box.innerHTML = `
               <p><strong>Name:</strong> ${entry.name}</p>
               <p><strong>Email:</strong> ${entry.email}</p>
-              <p><strong>Date:</strong> ${new Date(entry.submittedAt).toLocaleString()}</p>
+              <p><strong>Date:</strong> ${new Date(entry.date).toLocaleString()}</p>
               <hr class="my-2 border-gray-300">
               <div class="space-y-2">
                 ${entry.responses.map(r =>
@@ -93,4 +93,5 @@
   </script>
 </body>
 </html>
+
 
