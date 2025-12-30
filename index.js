@@ -1,13 +1,17 @@
-const express = require('express');
-const mongoose = require('mongoose');
-app.use(cors({
-  origin: 'https://timbrown841.github.io'
-}));
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 require('dotenv').config();
 
-const app = express();
-app.use(express.json());
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+const app = express();   // ✅ app is created HERE
+
+app.use(cors({          // 2️⃣ middleware
+  origin: 'https://timbrown841.github.io'
+}));
+
+app.use(express.json());  // 3️⃣ middleware
 
 // ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
@@ -150,5 +154,6 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
