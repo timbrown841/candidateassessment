@@ -6,27 +6,22 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
-  <h1 class="text-2xl font-bold mb-4">Admin Panel</h1>
+  <h1>Admin Panel</h1>
 
   <!-- 🔐 Login Form -->
-  <div id="login" class="max-w-md bg-white p-6 rounded shadow mx-auto mt-12">
-    <h2 class="text-xl mb-4 font-semibold">Login Required</h2>
+  <div id="login">
+    <h2>Login Required</h2>
     <input type="text" id="username" placeholder="Username"
-           autocapitalize="off" autocomplete="off"
-           class="block w-full mb-3 p-2 border rounded" />
+           autocapitalize="off" autocomplete="off"/>
     <input type="password" id="password" placeholder="Password"
-           autocapitalize="off" autocomplete="off"
-           class="block w-full mb-4 p-2 border rounded" />
-    <button onclick="checkLogin()"
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">
-      Login
-    </button>
-    <p id="login-error" class="text-red-600 mt-3 hidden">❌ Invalid credentials</p>
+           autocapitalize="off" autocomplete="off"/>
+    <button onclick="checkLogin()">Login</button>
+    <p id="login-error">❌ Invalid credentials</p>
   </div>
 
   <!-- 📋 Submissions Display -->
-  <div id="submissions-container" class="space-y-4 text-sm text-gray-800 mt-8 hidden">
-    <h2 class="text-xl font-semibold mb-4">Submitted Assessments</h2>
+  <div id="submissions-container">
+    <h2>Submitted Assessments</h2>
     <div id="submissions">Loading...</div>
   </div>
 
@@ -93,6 +88,7 @@
   </script>
 </body>
 </html>
+
 
 
 
