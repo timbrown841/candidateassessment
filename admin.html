@@ -49,7 +49,7 @@
     }
 
     function loadSubmissions() {
-      fetch('https://candidate-assessment-backend.onrender.com/api/submissions')
+      fetch('https://candidateassessment.onrender.com/api/submissions')
         .then(res => {
           if (!res.ok) throw new Error("Network response was not ok");
           return res.json();
@@ -93,3 +93,4 @@
   </script>
 </body>
 </html>
+
