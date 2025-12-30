@@ -1,11 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
+app.use(cors({
+  origin: 'https://timbrown841.github.io'
+}));
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
 // ✅ MongoDB connection
@@ -74,8 +75,12 @@ app.post('/api/submit', async (req, res) => {
 
 // ✅ Admin API (fetch all submissions)
 app.get('/api/submissions', async (req, res) => {
-  const submissions = await Submission.find();
-  res.json(submissions);
+  try {
+    const all = await Submission.find().sort({ submittedAt: -1 });
+    res.json(all);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error loading submissions' });
+  }
 });
 
 // ✅ Stripe Checkout API
@@ -145,4 +150,5 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
