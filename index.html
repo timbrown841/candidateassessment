@@ -218,10 +218,10 @@
       if (q.type === "mcq") {
        q.options.forEach(opt => {
   const wrapperRow = document.createElement('div');
-  wrapperRow.style.display = 'flex';
-  wrapperRow.style.justifyContent = 'space-between';
+    wrapperRow.style.display = 'flex';
   wrapperRow.style.alignItems = 'center';
-  wrapperRow.style.marginBottom = '8px';
+  wrapperRow.style.gap = '8px'; // adds space between text and button
+  wrapperRow.style.marginBottom = '6px';
 
   const text = document.createElement('span');
   text.textContent = opt;
@@ -288,6 +288,7 @@
 </script>
 </body>
 </html>
+
 
 
 
