@@ -91,9 +91,9 @@ app.post('/api/checkout', async (req, res) => {
   const { plan } = req.body;
 
   const prices = {
-    starter: 'price_1RoZjT0VW0HuFulYe6OE9GLr',
-    professional: 'price_1RoZkC0VW0HuFulYIm5DEjaR',
-    enterprise: 'price_1RoZlu0VW0HuFulYxn6cwYeA'
+    starter: 'price_1SkVFH1L3l4aj3goKdncyatc',
+    professional: 'price_1SkVG51L3l4aj3golaTs6ufC',
+    enterprise: 'price_1SkVPF1L3l4aj3gozeEvIYQv'
   };
 
   if (!prices[plan]) {
@@ -153,7 +153,3 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-
-
-
-
