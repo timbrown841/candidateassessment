@@ -5,9 +5,10 @@
   <title>Admin - Submissions</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+  <body>
 <body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
-  <h1>Admin Panel</h1>
-
+  <div class="card container">
+  <h1 class="centered mb-4">Admin Panel</h1>
   <!-- 🔐 Login Form -->
   <div id="login">
     <h2>Login Required</h2>
@@ -16,11 +17,11 @@
     <input type="password" id="password" placeholder="Password"
            autocapitalize="off" autocomplete="off"/>
     <button onclick="checkLogin()">Login</button>
-    <p id="login-error">❌ Invalid credentials</p>
+    <p id="login-error" class="alert-error hidden">❌ Invalid credentials</p>
   </div>
 
   <!-- 📋 Submissions Display -->
-  <div id="submissions-container">
+  <div id="submissions-container" class="hidden">
     <h2>Submitted Assessments</h2>
     <div id="submissions">Loading...</div>
   </div>
@@ -60,7 +61,7 @@
 
           data.forEach(entry => {
             const box = document.createElement('div');
-            box.className = "bg-white border border-gray-200 p-4 rounded shadow";
+            box.className = "card mb-4";
 
             box.innerHTML = `
               <p><strong>Name:</strong> ${entry.name}</p>
@@ -88,10 +89,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
