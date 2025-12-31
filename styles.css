@@ -213,3 +213,12 @@ footer {
   margin-bottom: 40px;
   color: #1e293b; /* dark slate */
 }
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.items-center {
+  align-items: center;
+}
