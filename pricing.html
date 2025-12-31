@@ -76,7 +76,7 @@
   <script>
     async function startCheckout(plan) {
       try {
-        const response = await fetch('https://candidate-assessment-backend.onrender.com/api/checkout', {
+        const response = await fetch('https://candidateassessment.onrender.com/api/checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ plan })
@@ -96,13 +96,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
