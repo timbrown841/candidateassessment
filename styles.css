@@ -222,3 +222,8 @@ footer {
 .items-center {
   align-items: center;
 }
+
+input[type="radio"] {
+  transform: scale(1.2);
+  accent-color: #2c3e50; /* Optional: style the radio button */
+}
