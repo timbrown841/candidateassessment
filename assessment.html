@@ -9,7 +9,6 @@
 <body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
   <div class="card container">
     <h1 class="centered mb-4">Candidate Portal</h1>
-    <button onclick="logout()" class="btn-blue mt-2">Logout</button>
 
     <!-- 🎯 Role Selection -->
     <div id="roleSelection" class="hidden">
@@ -24,6 +23,9 @@
   </select>
   <button onclick="startAssessment()">Start Assessment</button>
   <p id="roleError" class="hidden">☝️ Please select a role</p>
+
+      <!-- ✅ Logout button moved here -->
+  <button onclick="logout()" class="btn-blue mt-4">Logout</button>
 </div>
 
     <!-- 📋 Assessment Form (hidden until a role is selected) -->
