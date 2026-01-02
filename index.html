@@ -15,6 +15,11 @@
       <input type="email" id="loginEmail" placeholder="Email"/>
       <input type="password" id="loginPassword" placeholder="Password"/>
       <button onclick="handleLogin()">Login</button>
+
+      <p>
+    <a href="#" onclick="showResetPassword()">Forgot your password?</a>
+      </p>
+      
       <p>Don't have an account?
         <a href="#" onclick="showRegister()">Register here</a>
       </p>
@@ -33,6 +38,18 @@
       </p>
       <p id="registerError">📝 All fields are required</p>
     </div>
+
+    <!-- 🔑 Password Reset Form -->
+    <div id="resetForm" class="hidden">
+      <h2>Reset Your Password</h2>
+      <input type="email" id="resetEmail" placeholder="Enter your email" />
+      <button onclick="handleResetRequest()">Send Reset Link</button>
+      <p id="resetMessage"></p>
+      <p>
+        <a href="#" onclick="showLogin()">Back to login</a>
+      </p>
+    </div>
+
 
     <!-- 🎯 Role Selection -->
     <div id="roleSelection" class="hidden">
@@ -291,6 +308,7 @@ wrapper.appendChild(label);
 </script>
 </body>
 </html>
+
 
 
 
