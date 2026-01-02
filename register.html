@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register - Candidate Assessment</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
+  <div class="card container">
+    <h1 class="centered mb-4">Create an Account</h1>
+
+    <div id="registerForm">
+      <input type="text" id="registerName" placeholder="Full Name" />
+      <input type="email" id="registerEmail" placeholder="Email" />
+      <input type="password" id="registerPassword" placeholder="Password" />
+      <button onclick="handleRegister()">Register</button>
+      <p>
+        Already registered? <a href="login.html">Login</a>
+      </p>
+      <p id="registerError" class="alert-error hidden">📝 All fields are required</p>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'https://candidateassessment.onrender.com';
+
+    function handleRegister() {
+      const name = document.getElementById("registerName").value.trim();
+      const email = document.getElementById("registerEmail").value.trim().toLowerCase();
+      const password = document.getElementById("registerPassword").value.trim();
+      const error = document.getElementById("registerError");
+
+      if (!name || !email || !password) {
+        error.classList.remove("hidden");
+        return;
+      }
+
+      fetch(`${API_BASE_URL}/api/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      })
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(() => {
+        alert('✅ Registration successful. Check your email to verify.');
+        window.location.href = "login.html";
+      })
+      .catch(() => {
+        error.classList.remove("hidden");
+      });
+    }
+  </script>
+</body>
+</html>
