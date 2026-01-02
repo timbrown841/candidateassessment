@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - Candidate Assessment</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
+  <div class="card container">
+    <h1 class="centered mb-4">Login to Continue</h1>
+
+    <div id="loginForm">
+      <h2>Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+      <button onclick="handleLogin()">Login</button>
+      <p>
+        <a href="register.html">Don't have an account? Register</a>
+      </p>
+      <p>
+        <a href="reset-password.html">Forgot your password?</a>
+      </p>
+      <p id="loginError" class="alert-error hidden">❌ Invalid login credentials</p>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'https://candidateassessment.onrender.com';
+
+    function handleLogin() {
+      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const password = document.getElementById("loginPassword").value.trim();
+      const error = document.getElementById("loginError");
+
+      fetch(`${API_BASE_URL}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(data => {
+        localStorage.setItem("currentUser", JSON.stringify(data.user));
+        error.classList.add("hidden");
+        window.location.href = "index.html";
+      })
+      .catch(() => {
+        error.classList.remove("hidden");
+      });
+    }
+  </script>
+</body>
+</html>
