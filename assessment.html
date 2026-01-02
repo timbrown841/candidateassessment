@@ -23,7 +23,7 @@
     <option value="IT Help Desk Analyst">IT Help Desk Analyst</option>
   </select>
   <button onclick="startAssessment()">Start Assessment</button>
-  <p id="roleError">☝️ Please select a role</p>
+  <p id="roleError" class="hidden">☝️ Please select a role</p>
 </div>
 
     <!-- 📋 Assessment Form (hidden until a role is selected) -->
@@ -63,8 +63,6 @@
   localStorage.removeItem("currentUser");
   window.location.href = "login.html";
   }
-  
-  let selectedRole = "";
 
   // Sample question sets (10 per role)
   const questionBank = {
