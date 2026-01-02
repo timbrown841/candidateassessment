@@ -99,7 +99,11 @@ app.get('/api/verify-email', async (req, res) => {
   const { token } = req.query;
   if (!token) return res.status(400).send('Invalid verification link');
 
-  if (!user) return res.status(400).send('Invalid or expired verification link');
+  const user = await User.findOne({ verifyToken: token });
+
+  if (!user) {
+    return res.status(400).send('Invalid or expired verification link');
+  }
 
   user.isVerified = true;
   user.verifyToken = undefined;
@@ -217,10 +221,3 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-
-
-
-
-
-
-
