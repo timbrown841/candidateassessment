@@ -71,7 +71,7 @@ app.post('/api/register', async (req, res) => {
     await axios.post('https://api.brevo.com/v3/smtp/email', {
       sender: {
         name: 'Candidate Assessment',
-        email: 'no-reply@candidateassessment.com' // Verified sender in Brevo
+        email: 'treybl841@gmail.com' // Verified sender in Brevo
       },
       to: [{ email, name }],
       subject: 'Verify Your Email Address',
@@ -217,6 +217,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
