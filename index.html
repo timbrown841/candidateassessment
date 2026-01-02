@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Candidate Assessment</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
   <div class="card container">
     <h1 class="centered mb-4">Candidate Portal</h1>
+    <button onclick="logout()" class="btn-blue mt-2">Logout</button>
 
     <!-- 🎯 Role Selection -->
     <div id="roleSelection" class="hidden">
@@ -24,7 +26,7 @@
   <p id="roleError">☝️ Please select a role</p>
 </div>
 
-    <!-- 📋 Assessment Form (hidden until login) -->
+    <!-- 📋 Assessment Form (hidden until a role is selected) -->
     <div id="assessmentSection" class="hidden">
       <h2>Assessment</h2>
       <form id="assessmentForm">
@@ -40,6 +42,17 @@
 </div>
 
 <script>
+  let currentUser = null; // ✅ declare first
+  const storedUser = localStorage.getItem("currentUser");
+  
+  if (!storedUser) {
+  alert("⚠️ Please log in first.");
+  window.location.href = "login.html";
+  } else {
+    currentUser = JSON.parse(storedUser);
+    document.getElementById("roleSelection").classList.remove("hidden");
+  }
+
   const API_BASE_URL = 'https://candidateassessment.onrender.com';
   let currentUser = null;
   let selectedRole = "";
@@ -167,6 +180,13 @@ wrapper.appendChild(label);
 
   document.getElementById("assessmentForm").addEventListener("submit", function (e) {
     e.preventDefault();
+    
+    if (!currentUser) {
+      alert("Your session has expired. Please log in again.");
+      window.location.href = "login.html";
+      return;
+    }
+    
     const resultDiv = document.getElementById("result");
     const questions = questionBank[selectedRole];
 
@@ -208,3 +228,4 @@ wrapper.appendChild(label);
 </script>
 </body>
 </html>
+
