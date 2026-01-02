@@ -42,6 +42,9 @@
 </div>
 
 <script>
+  let currentUser = null;
+  let selectedRole = "";
+  
   document.addEventListener("DOMContentLoaded", () => {
   const storedUser = localStorage.getItem("currentUser");
 
@@ -53,18 +56,7 @@
   currentUser = JSON.parse(storedUser);
   document.getElementById("roleSelection").classList.remove("hidden");
   });
-
-  let currentUser = null; // ✅ declare first
-  const storedUser = localStorage.getItem("currentUser");
   
-  if (!storedUser) {
-  alert("⚠️ Please log in first.");
-  window.location.href = "login.html";
-  } else {
-    currentUser = JSON.parse(storedUser);
-    document.getElementById("roleSelection").classList.remove("hidden");
-  }
-
   const API_BASE_URL = 'https://candidateassessment.onrender.com';
   // ✅ Add this logout function
   function logout() {
@@ -72,7 +64,6 @@
   window.location.href = "login.html";
   }
   
-  let currentUser = null;
   let selectedRole = "";
 
   // Sample question sets (10 per role)
