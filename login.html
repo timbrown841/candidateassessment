@@ -25,6 +25,10 @@
   </div>
 
   <script>
+    const user = localStorage.getItem("currentUser");
+    if (user) {
+      window.location.href = "assessment.html";
+    }
     const API_BASE_URL = 'https://candidateassessment.onrender.com';
 
     function handleLogin() {
