@@ -105,7 +105,7 @@ app.get('/api/verify-email', async (req, res) => {
   user.verifyToken = undefined;
   await user.save();
 
-  res.send('✅ Email verified. You can now log in.');
+  res.redirect('https://timbrown841.github.io/candidateassessment/verified.html');
 });
 
 // ✅ Login API
@@ -217,6 +217,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
