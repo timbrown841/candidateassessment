@@ -85,6 +85,22 @@ app.post('/api/request-password-reset', async (req, res) => {
   }
 });
 
+// ✅ Validate reset token and return email
+app.get('/api/validate-reset-token', async (req, res) => {
+  const { token } = req.query;
+
+  const user = await User.findOne({
+    resetToken: token,
+    resetTokenExpiry: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    return res.status(400).json({ error: 'Invalid or expired token' });
+  }
+
+  res.json({ email: user.email });
+});
+
 // ✅ Reset Password
 app.post('/api/reset-password', async (req, res) => {
   const { token, newPassword } = req.body;
@@ -285,4 +301,5 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
