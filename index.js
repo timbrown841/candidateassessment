@@ -29,7 +29,9 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   isVerified: { type: Boolean, default: false },
-  verifyToken: String
+  verifyToken: String,
+  resetToken: String,                // ✅ for password reset
+  resetTokenExpiry: Date             // ✅ token expiration (e.g. 1 hour)
 });
 const User = mongoose.model('User', userSchema);
 
@@ -42,6 +44,68 @@ const submissionSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now }
 });
 const Submission = mongoose.model('Submission', submissionSchema);
+
+// ✅ Request Password Reset
+app.post('/api/request-password-reset', async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) return res.status(400).json({ error: 'User not found' });
+
+  const token = crypto.randomBytes(32).toString('hex');
+  user.resetToken = token;
+  user.resetTokenExpiry = Date.now() + 3600000; // 1 hour
+  await user.save();
+
+  const resetLink = `https://timbrown841.github.io/candidateassessment/reset-password.html?token=${token}`;
+
+  try {
+    await axios.post('https://api.brevo.com/v3/smtp/email', {
+      sender: {
+        name: 'Candidate Assessment',
+        email: 'treybl841@gmail.com'
+      },
+      to: [{ email, name: user.name }],
+      subject: 'Password Reset Request',
+      htmlContent: `
+        <p>Hi ${user.name},</p>
+        <p>Click <a href="${resetLink}">here to reset your password</a>. This link will expire in 1 hour.</p>
+      `
+    }, {
+      headers: {
+        'api-key': process.env.BREVO_API_KEY,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    res.json({ message: '✅ Password reset link sent' });
+  } catch (err) {
+    console.error('❌ Brevo error:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
+});
+
+// ✅ Reset Password
+app.post('/api/reset-password', async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  const user = await User.findOne({
+    resetToken: token,
+    resetTokenExpiry: { $gt: Date.now() }
+  });
+
+  if (!user) return res.status(400).json({ error: 'Invalid or expired token' });
+
+  const hashed = await bcrypt.hash(newPassword, 10);
+  user.password = hashed;
+  user.resetToken = undefined;
+  user.resetTokenExpiry = undefined;
+  await user.save();
+
+  res.json({ message: '✅ Password reset successfully' });
+});
+
+
 
 // ✅ Registration API
 app.post('/api/register', async (req, res) => {
@@ -221,3 +285,4 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
