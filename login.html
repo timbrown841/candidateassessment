@@ -32,20 +32,25 @@
       const password = document.getElementById("loginPassword").value.trim();
       const error = document.getElementById("loginError");
 
-      fetch(`${API_BASE_URL}/api/login`, {
+      fetch('https://candidateassessment.onrender.com/api/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({ email, password })
       })
-      .then(res => res.ok ? res.json() : Promise.reject())
-      .then(data => {
-        localStorage.setItem("currentUser", JSON.stringify(data.user));
-        error.classList.add("hidden");
-        window.location.href = "index.html";
-      })
-      .catch(() => {
-        error.classList.remove("hidden");
-      });
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            document.getElementById("loginError").textContent = data.error;
+          } else {
+            localStorage.setItem("currentUser", JSON.stringify(data.user));
+            window.location.href = "assessment.html"; // ✅ REDIRECT HERE
+          }
+        })
+        .catch(() => {
+          document.getElementById("loginError").textContent = "❌ Login failed. Please try again.";
+        });
     }
   </script>
 </body>
