@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Candidate Assessment</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
+  <div class="card container">
+    <h1 class="centered mb-4">Candidate Portal</h1>
+    <button onclick="logout()" class="btn-blue mt-2">Logout</button>
+
+    <!-- 🎯 Role Selection -->
+    <div id="roleSelection" class="hidden">
+      <h2>Select Job Role</h2>
+      <select id="roleDropdown">
+        <option value="">-- Choose a role --</option>
+    <option value="Infrastructure Engineer">Infrastructure Engineer</option>
+    <option value="Cloud Engineer">Cloud Engineer</option>
+    <option value="Network Engineer">Network Engineer</option>
+    <option value="DevOps Engineer">DevOps Engineer</option>
+    <option value="IT Help Desk Analyst">IT Help Desk Analyst</option>
+  </select>
+  <button onclick="startAssessment()">Start Assessment</button>
+  <p id="roleError">☝️ Please select a role</p>
+</div>
+
+    <!-- 📋 Assessment Form (hidden until a role is selected) -->
+    <div id="assessmentSection" class="hidden">
+      <h2>Assessment</h2>
+      <form id="assessmentForm">
+        <div id="questions" class="space-y-4"></div>
+        <button type="submit">Submit Assessment</button>
+      </form>
+      <div id="result"></div>
+    </div>
+  </div>
+
+    <div class="centered mt-4">
+  <a href="pricing.html" class="btn-blue">Pricing</a>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const storedUser = localStorage.getItem("currentUser");
+
+  if (!storedUser) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  currentUser = JSON.parse(storedUser);
+  document.getElementById("roleSelection").classList.remove("hidden");
+  });
+
+  let currentUser = null; // ✅ declare first
+  const storedUser = localStorage.getItem("currentUser");
+  
+  if (!storedUser) {
+  alert("⚠️ Please log in first.");
+  window.location.href = "login.html";
+  } else {
+    currentUser = JSON.parse(storedUser);
+    document.getElementById("roleSelection").classList.remove("hidden");
+  }
+
+  const API_BASE_URL = 'https://candidateassessment.onrender.com';
+  // ✅ Add this logout function
+  function logout() {
+  localStorage.removeItem("currentUser");
+  window.location.href = "login.html";
+  }
+  
+  let currentUser = null;
+  let selectedRole = "";
+
+  // Sample question sets (10 per role)
+  const questionBank = {
+    "Infrastructure Engineer": [
+      { type: "mcq", question: "Which RAID level provides mirroring?", options: ["RAID 0", "RAID 1", "RAID 5", "RAID 10"], answer: "RAID 1" },
+      { type: "written", question: "Explain how Group Policy can enforce security settings." },
+      { type: "mcq", question: "What is the function of Active Directory?", options: ["Web hosting", "User and resource management", "Firewall rules", "Antivirus deployment"], answer: "User and resource management" },
+      { type: "written", question: "Describe the steps to deploy Windows using WDS." },
+      { type: "mcq", question: "Which port does RDP use?", options: ["3389", "22", "443", "8080"], answer: "3389" },
+      { type: "mcq", question: "What command checks disk integrity in Windows?", options: ["ipconfig", "ping", "chkdsk", "tasklist"], answer: "chkdsk" },
+      { type: "written", question: "How do you backup domain controllers?" },
+      { type: "mcq", question: "What does DNS do?", options: ["Encrypts traffic", "Translates domain names to IPs", "Routes traffic", "Hosts websites"], answer: "Translates domain names to IPs" },
+      { type: "mcq", question: "Which protocol is used to sync time in a domain?", options: ["NTP", "SMTP", "SNMP", "FTP"], answer: "NTP" },
+      { type: "written", question: "List the steps to create a shared network folder with permissions." }
+    ],
+    "Cloud Engineer": [
+      { type: "mcq", question: "Which service manages Azure VMs?", options: ["Azure Monitor", "Azure VM Scale Sets", "Azure Resource Manager", "Azure Backup"], answer: "Azure Resource Manager" },
+      { type: "written", question: "Explain the difference between IaaS, PaaS, and SaaS." },
+      { type: "mcq", question: "What is the default Azure region for new resources?", options: ["East US", "West Europe", "Depends on tenant setup", "Global"], answer: "Depends on tenant setup" },
+      { type: "written", question: "Describe how to create a custom VNet in AWS or Azure." },
+      { type: "mcq", question: "Which service is used to monitor Azure resources?", options: ["Azure Advisor", "Azure Monitor", "Log Analytics", "Key Vault"], answer: "Azure Monitor" },
+      { type: "mcq", question: "What is Terraform used for?", options: ["Resource monitoring", "Infrastructure as code", "Logging", "Patching"], answer: "Infrastructure as code" },
+      { type: "written", question: "Describe the process of setting up an Azure Function." },
+      { type: "mcq", question: "Which AWS service allows container orchestration?", options: ["EC2", "ECS", "Lambda", "CloudTrail"], answer: "ECS" },
+      { type: "mcq", question: "Which Azure service provides secret storage?", options: ["Azure Secrets", "Key Vault", "Azure Safe", "Vault Lock"], answer: "Key Vault" },
+      { type: "written", question: "What steps do you take to secure cloud storage buckets?" }
+    ],
+    "Network Engineer": [
+      { type: "mcq", question: "What layer of the OSI model does a switch operate on?", options: ["1", "2", "3", "4"], answer: "2" },
+      { type: "written", question: "Describe the use of VLANs in network segmentation." },
+      { type: "mcq", question: "Which device provides NAT?", options: ["Switch", "Router", "Access Point", "Hub"], answer: "Router" },
+      { type: "written", question: "Explain how OSPF differs from RIP." },
+      { type: "mcq", question: "What does `traceroute` help diagnose?", options: ["DNS failures", "Path latency", "Bandwidth issues", "Encryption"], answer: "Path latency" },
+      { type: "mcq", question: "Which protocol uses port 161?", options: ["SMTP", "SNMP", "DNS", "RDP"], answer: "SNMP" },
+      { type: "written", question: "How do you configure a Cisco switch port for trunking?" },
+      { type: "mcq", question: "Which cable type is used for 1 Gbps Ethernet?", options: ["Cat3", "Cat5e", "Cat7", "Fiber"], answer: "Cat5e" },
+      { type: "mcq", question: "What’s the purpose of ARP?", options: ["Resolve MAC from IP", "Assign IP", "Send packets", "Encrypt traffic"], answer: "Resolve MAC from IP" },
+      { type: "written", question: "How do you troubleshoot IP conflicts on a LAN?" }
+    ],
+    "DevOps Engineer": [
+      { type: "mcq", question: "Which tool is used for continuous integration?", options: ["Ansible", "Jenkins", "Docker", "Nagios"], answer: "Jenkins" },
+      { type: "written", question: "Describe the steps to create a CI/CD pipeline in GitHub Actions." },
+      { type: "mcq", question: "What is the primary use of Kubernetes?", options: ["Database backup", "App orchestration", "Firewalling", "CI/CD"], answer: "App orchestration" },
+      { type: "written", question: "How do you create and manage Docker images?" },
+      { type: "mcq", question: "What does IaC stand for?", options: ["Internet and Cloud", "Infrastructure as Code", "Instance Allocation Control", "Internal access Cloud"], answer: "Infrastructure as Code" },
+      { type: "mcq", question: "Which command shows running containers in Docker?", options: ["docker list", "docker ps", "docker run", "docker monitor"], answer: "docker ps" },
+      { type: "written", question: "Explain how Terraform handles state files." },
+      { type: "mcq", question: "What does a YAML file define in GitHub Actions?", options: ["Workflow", "UI", "Metrics", "Firewall"], answer: "Workflow" },
+      { type: "mcq", question: "What is the main purpose of Prometheus?", options: ["CI/CD", "Monitoring", "Cloud storage", "Encryption"], answer: "Monitoring" },
+      { type: "written", question: "What tools do you use for log aggregation and visualization?" }
+    ],
+    "IT Help Desk Analyst": [
+      { type: "mcq", question: "What is the first step in troubleshooting?", options: ["Escalate", "Identify the issue", "Replace device", "Restart system"], answer: "Identify the issue" },
+      { type: "written", question: "Describe a time you resolved a user’s login problem." },
+      { type: "mcq", question: "Which command checks connectivity in Windows?", options: ["netstat", "ipconfig", "ping", "dir"], answer: "ping" },
+      { type: "written", question: "Explain how to reset a user’s password in Active Directory." },
+      { type: "mcq", question: "What does 'least privilege' mean?", options: ["Everyone gets admin", "No one gets access", "Only necessary permissions", "Group-wide access"], answer: "Only necessary permissions" },
+      { type: "mcq", question: "Which tool allows remote desktop access?", options: ["Word", "RDP", "Excel", "Teams"], answer: "RDP" },
+      { type: "written", question: "How do you handle a ticket for a slow-performing computer?" },
+      { type: "mcq", question: "Which file extension is for batch scripts?", options: [".sh", ".bat", ".ps1", ".cmd"], answer: ".bat" },
+      { type: "mcq", question: "Which Microsoft tool helps deploy software remotely?", options: ["WSUS", "Intune", "OneDrive", "Visio"], answer: "Intune" },
+      { type: "written", question: "How would you onboard a new user with email, laptop, and access setup?" }
+    ]
+  };
+
+  function startAssessment() {
+    const role = document.getElementById("roleDropdown").value;
+    const error = document.getElementById("roleError");
+    if (!role) {
+      error.classList.remove("hidden");
+      return;
+    }
+    error.classList.add("hidden");
+    selectedRole = role;
+    loadQuestions(questionBank[role]);
+    document.getElementById("roleSelection").classList.add("hidden");
+    document.getElementById("assessmentSection").classList.remove("hidden");
+  }
+
+  function loadQuestions(questions) {
+    const container = document.getElementById("questions");
+    container.innerHTML = '';
+    questions.forEach((q, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'p-4 border rounded';
+      const title = document.createElement('p');
+      title.className = 'font-semibold mb-2';
+      title.textContent = `${index + 1}. ${q.question}`;
+      wrapper.appendChild(title);
+      if (q.type === "mcq") {
+       q.options.forEach(opt => {
+  const wrapperRow = document.createElement('div');
+    wrapperRow.style.display = 'flex';
+  wrapperRow.style.alignItems = 'center';
+  wrapperRow.style.gap = '8px'; // adds space between text and button
+  wrapperRow.style.marginBottom = '6px';
+
+  const label = document.createElement('label');
+label.className = 'option-row';
+
+const radio = document.createElement('input');
+radio.type = 'radio';
+radio.name = `q${index}`;
+radio.value = opt;
+
+const span = document.createElement('span');
+span.textContent = opt;
+
+label.appendChild(radio);
+label.appendChild(span);
+wrapper.appendChild(label);
+        });
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.name = `q${index}`;
+        textarea.className = 'w-full p-2 border border-gray-300 rounded';
+        wrapper.appendChild(textarea);
+      }
+      container.appendChild(wrapper);
+    });
+  }
+
+  document.getElementById("assessmentForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    
+    if (!currentUser) {
+      alert("Your session has expired. Please log in again.");
+      window.location.href = "login.html";
+      return;
+    }
+    
+    const resultDiv = document.getElementById("result");
+    const questions = questionBank[selectedRole];
+
+    let score = 0, total = 0;
+    const responses = questions.map((q, index) => {
+      const input = document.forms["assessmentForm"].elements[`q${index}`];
+      const value = input?.value || input?.querySelector?.('textarea')?.value || '';
+      if (q.type === "mcq") {
+        total++;
+        if (value === q.answer) score++;
+      }
+      return { question: q.question, type: q.type, answer: value };
+    });
+
+    fetch(`${API_BASE_URL}/api/submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: currentUser.name,
+        email: currentUser.email,
+        role: selectedRole,
+        responses
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      resultDiv.innerHTML = `
+        <div>
+          You scored <strong>${score}</strong> out of <strong>${total}</strong> on the multiple-choice section.
+        </div>
+        <p>${data.message}</p>
+      `;
+    })
+    .catch(() => {
+      resultDiv.innerHTML = `<p>❌ There was an error submitting your assessment.</p>`;
+    });
+  });
+
+</script>
+</body>
+</html>
+
