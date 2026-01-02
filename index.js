@@ -4,6 +4,7 @@ const cors = require('cors');
 const app = express(); // ✅ Moved here before app.use()
 const axios = require('axios');
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
 require('dotenv').config();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -202,6 +203,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
