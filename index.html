@@ -54,6 +54,12 @@
   }
 
   const API_BASE_URL = 'https://candidateassessment.onrender.com';
+  // ✅ Add this logout function
+  function logout() {
+  localStorage.removeItem("currentUser");
+  window.location.href = "login.html";
+  }
+  
   let currentUser = null;
   let selectedRole = "";
 
@@ -228,4 +234,5 @@ wrapper.appendChild(label);
 </script>
 </body>
 </html>
+
 
