@@ -236,7 +236,3 @@ input[type="radio"] {
   font-size: 16px;
   white-space: nowrap;        /* Prevents text from wrapping */
 }
-
-.hidden {
-  display: none;
-}
