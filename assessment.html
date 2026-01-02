@@ -145,96 +145,96 @@
   }
 
   function loadQuestions(questions) {
-    const container = document.getElementById("questions");
-    container.innerHTML = '';
-    questions.forEach((q, index) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'p-4 border rounded';
-      const title = document.createElement('p');
-      title.className = 'font-semibold mb-2';
-      title.textContent = `${index + 1}. ${q.question}`;
-      wrapper.appendChild(title);
-      if (q.type === "mcq") {
-       q.options.forEach(opt => {
-  const wrapperRow = document.createElement('div');
-    wrapperRow.style.display = 'flex';
-  wrapperRow.style.alignItems = 'center';
-  wrapperRow.style.gap = '8px'; // adds space between text and button
-  wrapperRow.style.marginBottom = '6px';
+  const container = document.getElementById("questions");
+  container.innerHTML = '';
+  questions.forEach((q, index) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'p-4 border rounded';
+    const title = document.createElement('p');
+    title.className = 'font-semibold mb-2';
+    title.textContent = `${index + 1}. ${q.question}`;
+    wrapper.appendChild(title);
 
-  const label = document.createElement('label');
-label.className = 'option-row';
+    if (q.type === "mcq") {
+      q.options.forEach(opt => {
+        const wrapperRow = document.createElement('div');
+        wrapperRow.style.display = 'flex';
+        wrapperRow.style.alignItems = 'center';
+        wrapperRow.style.gap = '8px';
+        wrapperRow.style.marginBottom = '10px';
 
-const radio = document.createElement('input');
-radio.type = 'radio';
-radio.name = `q${index}`;
-radio.value = opt;
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = `q${index}`;
+        radio.value = opt;
 
-const span = document.createElement('span');
-span.textContent = opt;
+        const label = document.createElement('label');
+        label.textContent = opt;
+        label.style.flex = '1';
 
-label.appendChild(radio);
-label.appendChild(span);
-wrapper.appendChild(label);
-        });
-      } else {
-        const textarea = document.createElement('textarea');
-        textarea.name = `q${index}`;
-        textarea.className = 'w-full p-2 border border-gray-300 rounded';
-        wrapper.appendChild(textarea);
-      }
-      container.appendChild(wrapper);
-    });
+        wrapperRow.appendChild(radio);
+        wrapperRow.appendChild(label);
+        wrapper.appendChild(wrapperRow);
+      });
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.name = `q${index}`;
+      textarea.className = 'w-full p-2 border border-gray-300 rounded';
+      wrapper.appendChild(textarea);
+    }
+
+    container.appendChild(wrapper);
+  });
+}
+
+// ✅ Properly placed outside loadQuestions()
+document.getElementById("assessmentForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  if (!currentUser) {
+    alert("Your session has expired. Please log in again.");
+    window.location.href = "login.html";
+    return;
   }
 
-  document.getElementById("assessmentForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    
-    if (!currentUser) {
-      alert("Your session has expired. Please log in again.");
-      window.location.href = "login.html";
-      return;
+  const resultDiv = document.getElementById("result");
+  const questions = questionBank[selectedRole];
+
+  let score = 0, total = 0;
+  const responses = questions.map((q, index) => {
+    const input = document.forms["assessmentForm"].elements[`q${index}`];
+    const value = input?.value || input?.querySelector?.('textarea')?.value || '';
+    if (q.type === "mcq") {
+      total++;
+      if (value === q.answer) score++;
     }
-    
-    const resultDiv = document.getElementById("result");
-    const questions = questionBank[selectedRole];
-
-    let score = 0, total = 0;
-    const responses = questions.map((q, index) => {
-      const input = document.forms["assessmentForm"].elements[`q${index}`];
-      const value = input?.value || input?.querySelector?.('textarea')?.value || '';
-      if (q.type === "mcq") {
-        total++;
-        if (value === q.answer) score++;
-      }
-      return { question: q.question, type: q.type, answer: value };
-    });
-
-    fetch(`${API_BASE_URL}/api/submit`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: currentUser.name,
-        email: currentUser.email,
-        role: selectedRole,
-        responses
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      resultDiv.innerHTML = `
-        <div>
-          You scored <strong>${score}</strong> out of <strong>${total}</strong> on the multiple-choice section.
-        </div>
-        <p>${data.message}</p>
-      `;
-    })
-    .catch(() => {
-      resultDiv.innerHTML = `<p>❌ There was an error submitting your assessment.</p>`;
-    });
+    return { question: q.question, type: q.type, answer: value };
   });
+
+  fetch(`${API_BASE_URL}/api/submit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: currentUser.name,
+      email: currentUser.email,
+      role: selectedRole,
+      responses
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    resultDiv.innerHTML = `
+      <div>
+        You scored <strong>${score}</strong> out of <strong>${total}</strong> on the multiple-choice section.
+      </div>
+      <p>${data.message}</p>
+    `;
+  })
+  .catch(() => {
+    resultDiv.innerHTML = `<p>❌ There was an error submitting your assessment.</p>`;
+  });
+});
 
 </script>
 </body>
 </html>
-
