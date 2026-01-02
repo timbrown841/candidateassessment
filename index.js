@@ -103,9 +103,12 @@ app.get('/api/verify-email', async (req, res) => {
 // ✅ Login API
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email, password });
 
+  const user = await User.findOne({ email });
   if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+
+  if (user.password !== password) return res.status(401).json({ error: 'Invalid credentials' });
+
   if (!user.isVerified) return res.status(403).json({ error: 'Email not verified' });
 
   res.json({ message: 'Login successful', user });
@@ -199,5 +202,6 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
