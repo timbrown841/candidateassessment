@@ -54,7 +54,15 @@ app.post('/api/register', async (req, res) => {
 
   const verifyToken = crypto.randomBytes(32).toString('hex');
 
-  const newUser = new User({ name, email, password, verifyToken });
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
+  const newUser = new User({
+  name,
+  email,
+  password: hashedPassword,
+  verifyToken
+  });
+
   await newUser.save();
 
   const verifyUrl = `https://candidateassessment.onrender.com/api/verify-email?token=${verifyToken}`;
@@ -91,7 +99,6 @@ app.get('/api/verify-email', async (req, res) => {
   const { token } = req.query;
   if (!token) return res.status(400).send('Invalid verification link');
 
-  const user = await User.findOne({ verifyToken: token });
   if (!user) return res.status(400).send('Invalid or expired verification link');
 
   user.isVerified = true;
@@ -106,11 +113,18 @@ app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-  if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
 
-  if (user.password !== password) return res.status(401).json({ error: 'Invalid credentials' });
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
 
-  if (!user.isVerified) return res.status(403).json({ error: 'Email not verified' });
+  if (!user.isVerified) {
+    return res.status(403).json({ error: 'Email not verified' });
+  }
 
   res.json({ message: 'Login successful', user });
 });
@@ -203,6 +217,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
