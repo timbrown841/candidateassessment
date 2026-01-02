@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGO_URI, {
 const userSchema = new mongoose.Schema({
   name: String,
   email: String,
-  password: String
+  password: String,
   isVerified: { type: Boolean, default: false },
   verifyToken: String
 });
@@ -43,9 +43,6 @@ const submissionSchema = new mongoose.Schema({
 const Submission = mongoose.model('Submission', submissionSchema);
 
 // ✅ Registration API
-const crypto = require('crypto');
-const nodemailer = require('nodemailer');
-
 app.post('/api/register', async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -86,23 +83,6 @@ app.post('/api/register', async (req, res) => {
     console.error('❌ Brevo email error:', err.response?.data || err.message);
     res.status(500).json({ error: 'Failed to send verification email.' });
   }
-});
-
-  const verifyUrl = `https://candidateassessment.onrender.com/api/verify-email?token=${verifyToken}`;
-  const mailOptions = {
-    from: `"Candidate Assessment" <${process.env.EMAIL_USER}>`,
-    to: email,
-    subject: 'Verify your email',
-    html: `<p>Hi ${name},</p><p>Please <a href="${verifyUrl}">verify your email</a> to activate your account.</p>`
-  };
-
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      console.error('Email send error:', err);
-      return res.status(500).json({ error: 'Failed to send verification email' });
-    }
-    res.json({ message: 'Registration successful. Please check your email to verify your account.' });
-  });
 });
 
 // ✅ Verify email
@@ -219,4 +199,5 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
