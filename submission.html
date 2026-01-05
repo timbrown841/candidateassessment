@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Candidate Submission</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body style="background: #f4f4f4; padding: 20px;">
+  <div class="card container">
+    <h1 class="mb-4">Candidate Submission</h1>
+    <div id="details">Loading...</div>
+    <button onclick="goBack()">⬅ Back</button>
+  </div>
+
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+
+    const token = localStorage.getItem("adminToken");
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id || !token) {
+      document.getElementById("details").innerHTML = "❌ Invalid access.";
+    } else {
+      fetch(`https://candidateassessment.onrender.com/api/submission/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Access denied or not found");
+        return res.json();
+      })
+      .then(data => {
+        const wrapper = document.getElementById("details");
+        wrapper.innerHTML = `
+          <p><strong>Name:</strong> ${data.name}</p>
+          <p><strong>Email:</strong> ${data.email}</p>
+          <p><strong>Role:</strong> ${data.role}</p>
+          <p><strong>Date:</strong> ${new Date(data.date).toLocaleString()}</p>
+          <hr class="my-3" />
+          ${data.responses.map(r => `
+            <div style="margin-bottom: 1rem;">
+              <p><strong>Q:</strong> ${r.question}</p>
+              <p><strong>A:</strong> ${r.answer || "No answer"}</p>
+            </div>
+          `).join('')}
+        `;
+      })
+      .catch(err => {
+        document.getElementById("details").textContent = "❌ Failed to load submission.";
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>
