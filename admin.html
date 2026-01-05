@@ -58,40 +58,38 @@
 }
     
     function loadSubmissions() {
-      const token = localStorage.getItem('adminToken');
-      fetch('https://candidateassessment.onrender.com/api/submissions', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-        .then(res => {
-          if (!res.ok) throw new Error();
-          return res.json();
-        })
-        .then(data => {
-          const container = document.getElementById('submissions');
-          container.innerHTML = '';
-          
-          data.forEach(entry => {
-            const box = document.createElement('div');
-            box.className = 'card mb-4';
+      const token = localStorage.getItem("adminToken");
 
-      box.innerHTML = `
-        <p><strong>Name:</strong> ${entry.name}</p>
-        <p><strong>Email:</strong> ${entry.email}</p>
-        <p><strong>Date:</strong> ${new Date(entry.date).toLocaleString()}</p>
-        <hr>
-        ${entry.responses.map(r => `
-          <p><strong>Q:</strong> ${r.question}</p>
-          <p><strong>A:</strong> ${r.answer || '—'}</p>
-        `).join('')}
-      `;
-      container.appendChild(box);
+  fetch('https://candidateassessment.onrender.com/api/submissions', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Unauthorized or network error");
+    return res.json();
+  })
+  .then(data => {
+    const container = document.getElementById('submissions');
+    container.innerHTML = '';
+
+    if (data.length === 0) {
+      container.textContent = 'No submissions found.';
+      return;
+    }
+
+    data.forEach(entry => {
+      const link = document.createElement('a');
+      link.href = `submission.html?id=${entry._id}`;
+      link.textContent = `${entry.name} (${new Date(entry.date).toLocaleString()})`;
+      link.className = "block mb-2 text-blue-600 underline";
+
+      container.appendChild(link);
     });
   })
-  .catch(() => {
-    document.getElementById('submissions').textContent =
-      '❌ Unauthorized or expired session.';
+  .catch(err => {
+    console.error(err);
+    document.getElementById('submissions').textContent = '❌ Error loading data.';
   });
 }
 
@@ -106,4 +104,5 @@
   </script>
 </body>
 </html>
+
 
