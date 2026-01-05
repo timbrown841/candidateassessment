@@ -24,6 +24,9 @@
     <h2>Submitted Assessments</h2>
     <div id="submissions">Loading...</div>
   </div>
+     <!-- 🔓 Logout Button -->
+  <button onclick="logout()" style="margin-top: 20px;">Logout</button>
+  </div>
 
   <script>
     async function checkLogin() {
@@ -95,6 +98,12 @@
     if (!localStorage.getItem('adminToken')) {
   document.getElementById('login').style.display = 'block';
 }
+    function logout() {
+  localStorage.removeItem("adminToken");
+  localStorage.removeItem("isAdmin");
+  location.reload(); // Refresh to show login screen again
+}
   </script>
 </body>
 </html>
+
