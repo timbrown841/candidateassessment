@@ -58,7 +58,7 @@
 }
     
     function loadSubmissions() {
-      const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("adminToken");
 
   fetch('https://candidateassessment.onrender.com/api/submissions', {
     headers: {
@@ -78,11 +78,14 @@
       return;
     }
 
+    // Sort submissions: newest first
+    data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
     data.forEach(entry => {
       const link = document.createElement('a');
       link.href = `submission.html?id=${entry._id}`;
-      link.textContent = `${entry.name} (${new Date(entry.date).toLocaleString()})`;
-      link.className = "block mb-2 text-blue-600 underline";
+      link.textContent = `${entry.name} — ${new Date(entry.date).toLocaleString()}`;
+      link.className = "block mb-3 text-blue-700 font-medium hover:underline";
 
       container.appendChild(link);
     });
@@ -104,5 +107,6 @@
   </script>
 </body>
 </html>
+
 
 
