@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 
 require('dotenv').config();
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "admin-secret-token";
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // 2️⃣ middleware
@@ -226,11 +227,18 @@ app.post('/api/submit', async (req, res) => {
 
 // ✅ Admin API (fetch all submissions)
 app.get('/api/submissions', async (req, res) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
   try {
-    const all = await Submission.find().sort({ submittedAt: -1 });
-    res.json(all);
+    const submissions = await Submission.find().sort({ date: -1 });
+    res.json(submissions);
   } catch (err) {
-    res.status(500).json({ message: 'Server error loading submissions' });
+    console.error("❌ Failed to fetch submissions:", err);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
@@ -301,5 +309,6 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
