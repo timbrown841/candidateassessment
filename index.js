@@ -225,22 +225,66 @@ app.post('/api/submit', async (req, res) => {
   res.json({ message: 'Assessment submitted successfully' });
 });
 
-// ✅ Admin API (fetch all submissions)
-app.get('/api/submissions', async (req, res) => {
-  const authHeader = req.headers.authorization;
+// ✅ Admin Login Route
+const jwt = require('jsonwebtoken');
 
-  if (!authHeader || authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+app.post('/api/admin/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  if (username !== process.env.ADMIN_USERNAME) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  const isValid = await bcrypt.compare(
+    password,
+    process.env.ADMIN_PASSWORD_HASH
+  );
+
+  if (!isValid) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  const token = jwt.sign(
+    { role: 'admin' },
+    process.env.ADMIN_JWT_SECRET,
+    { expiresIn: '2h' }
+  );
+
+  res.json({ token });
+});
+
+// ✅ Protect Admin Routes With Middleware
+function requireAdmin(req, res, next) {
+  const auth = req.headers.authorization;
+
+  if (!auth || !auth.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
   try {
+    const token = auth.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.ADMIN_JWT_SECRET);
+
+    if (decoded.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    next();
+  } catch {
+    return res.status(401).json({ error: 'Invalid or expired token' });
+  }
+}
+
+// ✅ Admin API (fetch all submissions)
+app.get('/api/submissions', requireAdmin, async (req, res) => {
+  try {
     const submissions = await Submission.find().sort({ date: -1 });
     res.json(submissions);
   } catch (err) {
-    console.error("❌ Failed to fetch submissions:", err);
     res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 // ✅ Stripe Checkout API
 app.post('/api/checkout', async (req, res) => {
@@ -309,6 +353,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
