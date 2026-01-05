@@ -285,6 +285,17 @@ app.get('/api/submissions', requireAdmin, async (req, res) => {
   }
 });
 
+// ✅ Fetch a single submission by ID (admin only)
+app.get('/api/submission/:id', requireAdmin, async (req, res) => {
+  try {
+    const submission = await Submission.findById(req.params.id);
+    if (!submission) return res.status(404).json({ error: "Not found" });
+    res.json(submission);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 
 // ✅ Stripe Checkout API
 app.post('/api/checkout', async (req, res) => {
@@ -353,6 +364,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
