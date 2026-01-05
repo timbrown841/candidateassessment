@@ -5,7 +5,6 @@
   <title>Admin - Submissions</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-  <body>
 <body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
   <div class="card container">
   <h1 class="centered mb-4">Admin Panel</h1>
@@ -37,7 +36,7 @@
 
       if (u === USERNAME && p === PASSWORD) {
         // Save token in localStorage
-        localStorage.setItem("adminToken", "admin-secret-token");
+        localStorage.setItem("isAdmin", "true");
         document.getElementById('login').style.display = 'none';
         document.getElementById('submissions-container').classList.remove('hidden');
         loadSubmissions();
@@ -51,7 +50,8 @@
 
   fetch('https://candidateassessment.onrender.com/api/submissions', {
     headers: {
-      Authorization: `Bearer ${token}`
+      headers: {
+        Authorization: `Bearer ${token}`
     }
   })
   .then(res => {
@@ -97,4 +97,5 @@
   </script>
 </body>
 </html>
+
 
