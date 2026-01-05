@@ -238,7 +238,7 @@ input[type="radio"] {
 }
 
 /* ========== To improve spacing/appearance ========== */
-.submissions a {
+#submissions a {
   display: block;
   margin-bottom: 12px;
   font-size: 16px;
@@ -246,7 +246,7 @@ input[type="radio"] {
   text-decoration: none;
 }
 
-.submissions a:hover {
+#submissions a:hover {
   text-decoration: underline;
   color: #0c369c;
 }
