@@ -36,6 +36,8 @@
       const error = document.getElementById('login-error');
 
       if (u === USERNAME && p === PASSWORD) {
+        // Save token in localStorage
+        localStorage.setItem("adminToken", "admin-secret-token");
         document.getElementById('login').style.display = 'none';
         document.getElementById('submissions-container').classList.remove('hidden');
         loadSubmissions();
@@ -44,48 +46,55 @@
       }
     }
 
-    function loadSubmissions() {
-      fetch('https://candidateassessment.onrender.com/api/submissions')
-        .then(res => {
-          if (!res.ok) throw new Error("Network response was not ok");
-          return res.json();
-        })
-        .then(data => {
-          const container = document.getElementById('submissions');
-          container.innerHTML = '';
+   function loadSubmissions() {
+  const token = localStorage.getItem("adminToken");
 
-          if (data.length === 0) {
-            container.textContent = 'No submissions found.';
-            return;
-          }
-
-          data.forEach(entry => {
-            const box = document.createElement('div');
-            box.className = "card mb-4";
-
-            box.innerHTML = `
-              <p><strong>Name:</strong> ${entry.name}</p>
-              <p><strong>Email:</strong> ${entry.email}</p>
-              <p><strong>Date:</strong> ${new Date(entry.date).toLocaleString()}</p>
-              <hr class="my-2 border-gray-300">
-              <div class="space-y-2">
-                ${entry.responses.map(r =>
-                  `<div>
-                    <p class="font-semibold">Q: ${r.question}</p>
-                    <p class="ml-2">A: ${r.answer || 'No answer'}</p>
-                  </div>`
-                ).join('')}
-              </div>
-            `;
-
-            container.appendChild(box);
-          });
-        })
-        .catch(err => {
-          console.error(err);
-          document.getElementById('submissions').textContent = 'Error loading data.';
-        });
+  fetch('https://candidateassessment.onrender.com/api/submissions', {
+    headers: {
+      Authorization: `Bearer ${token}`
     }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Unauthorized or network error");
+    return res.json();
+  })
+  .then(data => {
+    const container = document.getElementById('submissions');
+    container.innerHTML = '';
+
+    if (data.length === 0) {
+      container.textContent = 'No submissions found.';
+      return;
+    }
+
+    data.forEach(entry => {
+      const box = document.createElement('div');
+      box.className = "card mb-4";
+
+      box.innerHTML = `
+        <p><strong>Name:</strong> ${entry.name}</p>
+        <p><strong>Email:</strong> ${entry.email}</p>
+        <p><strong>Date:</strong> ${new Date(entry.date).toLocaleString()}</p>
+        <hr class="my-2 border-gray-300">
+        <div class="space-y-2">
+          ${entry.responses.map(r =>
+            `<div>
+              <p class="font-semibold">Q: ${r.question}</p>
+              <p class="ml-2">A: ${r.answer || 'No answer'}</p>
+            </div>`
+          ).join('')}
+        </div>
+      `;
+
+      container.appendChild(box);
+    });
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById('submissions').textContent = '❌ Error loading data.';
+  });
+}
   </script>
 </body>
 </html>
+
