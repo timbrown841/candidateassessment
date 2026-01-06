@@ -32,6 +32,7 @@ const questionSchema = new mongoose.Schema({
   correctAnswer: String,
   image: String, // optional image URL
   clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }
+}
 });
 const Question = mongoose.model('Question', questionSchema);
 
@@ -56,7 +57,7 @@ const userSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   verifyToken: String,
   resetToken: String,                // ✅ for password reset
-  resetTokenExpiry: Date             // ✅ token expiration (e.g. 1 hour)
+  resetTokenExpiry: Date,            // ✅ token expiration (e.g. 1 hour)
   clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }
 });
 const User = mongoose.model('User', userSchema);
@@ -400,6 +401,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
