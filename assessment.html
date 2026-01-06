@@ -64,29 +64,29 @@
   let loadedQuestions = [];
   
   document.addEventListener("DOMContentLoaded", () => {
+    console.log("📦 DOM loaded");
+    
   const storedUser = localStorage.getItem("currentUser");
-    const clientId = localStorage.getItem("clientId");
+  const clientId = localStorage.getItem("clientId");
+    console.log("👤 currentUser:", storedUser);
+  console.log("🏢 clientId:", clientId);
     // ✅ Fetch Client ID
 fetch(`${API_BASE_URL}/api/client/${clientId}`)
   .then(res => res.json())
   .then(data => {
-    document.querySelector('body').style.backgroundColor = data.primaryColor;
+    console.log("🎨 Client branding:", data);
+    document.body.style.backgroundColor = data.primaryColor;
     document.querySelector('#logo').src = data.logoUrl;
     document.querySelector('#instructions').textContent = data.instructions;
   });
-
-  if (!storedUser) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  const role = localStorage.getItem("selectedRole");
+    .catch(err => {
+    console.error("❌ Branding fetch failed", err);
+    });
 
   currentUser = JSON.parse(storedUser);
   document.getElementById("roleSelection").classList.remove("hidden");
-  });
+});
 
-  
   const API_BASE_URL = 'https://candidateassessment.onrender.com';
 
   const questionBank = {
