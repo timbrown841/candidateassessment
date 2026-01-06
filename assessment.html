@@ -60,6 +60,7 @@
 <script>
   let currentUser = null;
   let selectedRole = "";
+  let loadedQuestions = [];
   
   document.addEventListener("DOMContentLoaded", () => {
   const storedUser = localStorage.getItem("currentUser");
@@ -79,9 +80,6 @@ fetch(`/api/client/${clientId}`)
   }
 
   const role = localStorage.getItem("selectedRole");
-
-fetch(`/api/questions/${role}/${clientId}`)
-  .then(res => res.json())
 
   currentUser = JSON.parse(storedUser);
   document.getElementById("roleSelection").classList.remove("hidden");
