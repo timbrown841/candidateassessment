@@ -24,6 +24,19 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('✅ Connected to MongoDB'))
 .catch(err => console.error('❌ MongoDB connection error:', err));
 
+// ✅ MongoDB Client Model
+const clientSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  logoUrl: String,
+  primaryColor: String,
+  secondaryColor: String,
+  instructions: String,
+  customLink: String,
+  questionBank: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }]
+});
+const Client = mongoose.model('Client', clientSchema);
+
 // ✅ User Schema and Model
 const userSchema = new mongoose.Schema({
   name: String,
@@ -33,6 +46,7 @@ const userSchema = new mongoose.Schema({
   verifyToken: String,
   resetToken: String,                // ✅ for password reset
   resetTokenExpiry: Date             // ✅ token expiration (e.g. 1 hour)
+  clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }
 });
 const User = mongoose.model('User', userSchema);
 
@@ -121,8 +135,6 @@ app.post('/api/reset-password', async (req, res) => {
 
   res.json({ message: '✅ Password reset successfully' });
 });
-
-
 
 // ✅ Registration API
 app.post('/api/register', async (req, res) => {
@@ -214,6 +226,13 @@ app.post('/api/login', async (req, res) => {
   res.json({ message: 'Login successful', user });
 });
 
+// ✅ Serve Branding to Frontend
+app.get('/api/client/:clientId', async (req, res) => {
+  const client = await Client.findById(req.params.clientId);
+  if (!client) return res.status(404).json({ error: 'Client not found' });
+  res.json(client);
+});
+
 // ✅ Submit Assessment API
 app.post('/api/submit', async (req, res) => {
   const { name, email, role, responses } = req.body;
@@ -296,7 +315,6 @@ app.get('/api/submission/:id', requireAdmin, async (req, res) => {
   }
 });
 
-
 // ✅ Stripe Checkout API
 app.post('/api/checkout', async (req, res) => {
   const { plan } = req.body;
@@ -332,7 +350,7 @@ app.post('/api/checkout', async (req, res) => {
   }
 });
 
-// Contact Schema
+// ✅ Contact Schema
 const contactSchema = new mongoose.Schema({
   name: String,
   email: String,
@@ -342,7 +360,7 @@ const contactSchema = new mongoose.Schema({
 });
 const Contact = mongoose.model('Contact', contactSchema);
 
-// Contact Form API
+// ✅ Contact Form API
 app.post('/api/contact', async (req, res) => {
   const { name, email, company, message } = req.body;
   if (!name || !email || !message) {
@@ -364,6 +382,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
