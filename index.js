@@ -24,6 +24,17 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('✅ Connected to MongoDB'))
 .catch(err => console.error('❌ MongoDB connection error:', err));
 
+// ✅ Question model
+const questionSchema = new mongoose.Schema({
+  role: String,
+  question: String,
+  options: [String],
+  correctAnswer: String,
+  image: String, // optional image URL
+  clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }
+});
+const Question = mongoose.model('Question', questionSchema);
+
 // ✅ MongoDB Client Model
 const clientSchema = new mongoose.Schema({
   name: String,
@@ -389,6 +400,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
