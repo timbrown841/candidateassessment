@@ -66,6 +66,16 @@
   window.location.href = "login.html";
   }
 
+  const questionSchema = new mongoose.Schema({
+  clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
+  role: String,
+  question: String,
+  options: [String],
+  correctAnswer: String,
+  image: String
+});
+const Question = mongoose.model('Question', questionSchema);
+
   // Sample question sets (10 per role)
   const questionBank = {
     "Infrastructure Engineer": [
@@ -190,6 +200,15 @@
     container.appendChild(wrapper);
   });
 }
+
+// ✅ Fetch Client ID
+fetch(`/api/client/${clientId}`)
+  .then(res => res.json())
+  .then(data => {
+    document.querySelector('body').style.backgroundColor = data.primaryColor;
+    document.querySelector('#logo').src = data.logoUrl;
+    document.querySelector('#instructions').textContent = data.instructions;
+  });
 
 // ✅ Properly placed outside loadQuestions()
 document.getElementById("assessmentForm").addEventListener("submit", function (e) {
