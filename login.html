@@ -49,6 +49,7 @@
             document.getElementById("loginError").textContent = data.error;
           } else {
             localStorage.setItem("currentUser", JSON.stringify(data.user));
+            localStorage.setItem("clientId", user.clientId);
             window.location.href = "assessment.html"; // ✅ REDIRECT HERE
           }
         })
