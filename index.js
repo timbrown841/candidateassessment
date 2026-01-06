@@ -32,7 +32,6 @@ const questionSchema = new mongoose.Schema({
   correctAnswer: String,
   image: String, // optional image URL
   clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }
-}
 });
 const Question = mongoose.model('Question', questionSchema);
 
@@ -401,6 +400,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
