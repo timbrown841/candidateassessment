@@ -33,6 +33,7 @@ const questionSchema = new mongoose.Schema({
   image: String, // optional image URL
   clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }
 });
+
 const Question = mongoose.model('Question', questionSchema);
 
 // ✅ MongoDB Client Model
@@ -46,6 +47,7 @@ const clientSchema = new mongoose.Schema({
   customLink: String,
   questionBank: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }]
 });
+
 const Client = mongoose.model('Client', clientSchema);
 
 // ✅ User Schema and Model
@@ -59,6 +61,7 @@ const userSchema = new mongoose.Schema({
   resetTokenExpiry: Date,            // ✅ token expiration (e.g. 1 hour)
   clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' }
 });
+
 const User = mongoose.model('User', userSchema);
 
 // ✅ Submission Schema
@@ -69,6 +72,7 @@ const submissionSchema = new mongoose.Schema({
   responses: Array,
   date: { type: Date, default: Date.now }
 });
+
 const Submission = mongoose.model('Submission', submissionSchema);
 
 // ✅ Request Password Reset
@@ -400,13 +404,3 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-
-
-
-
-
-
-
-
-
-
