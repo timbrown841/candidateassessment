@@ -55,9 +55,17 @@
     return;
   }
 
+  const role = localStorage.getItem("selectedRole");
+const clientId = localStorage.getItem("clientId");
+
+fetch(`/api/questions/${role}/${clientId}`)
+  .then(res => res.json())
+  .then(questions => renderQuestions(questions));
+
   currentUser = JSON.parse(storedUser);
   document.getElementById("roleSelection").classList.remove("hidden");
   });
+
   
   const API_BASE_URL = 'https://candidateassessment.onrender.com';
   // ✅ Add this logout function
