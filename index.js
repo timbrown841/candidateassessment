@@ -315,6 +315,13 @@ app.get('/api/submission/:id', requireAdmin, async (req, res) => {
   }
 });
 
+// ✅ API to Fetch Questions for Logged-in User
+app.get('/api/questions/:role/:clientId', async (req, res) => {
+  const { role, clientId } = req.params;
+  const questions = await Question.find({ clientId, role });
+  res.json(questions);
+});
+
 // ✅ Stripe Checkout API
 app.post('/api/checkout', async (req, res) => {
   const { plan } = req.body;
@@ -382,6 +389,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
