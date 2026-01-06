@@ -25,38 +25,41 @@
   </div>
 
   <script>
-    const user = localStorage.getItem("currentUser");
-    if (user) {
-      window.location.href = "assessment.html";
-    }
-    const API_BASE_URL = 'https://candidateassessment.onrender.com';
+    const existingUser = localStorage.getItem("currentUser");
+  if (existingUser) {
+    window.location.href = "assessment.html";
+  }
 
-    function handleLogin() {
-      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
-      const password = document.getElementById("loginPassword").value.trim();
-      const error = document.getElementById("loginError");
+  const API_BASE_URL = 'https://candidateassessment.onrender.com';
 
-      fetch('https://candidateassessment.onrender.com/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.error) {
-            document.getElementById("loginError").textContent = data.error;
-          } else {
-            localStorage.setItem("currentUser", JSON.stringify(data.user));
-            localStorage.setItem("clientId", user.clientId);
-            window.location.href = "assessment.html"; // ✅ REDIRECT HERE
-          }
-        })
-        .catch(() => {
-          document.getElementById("loginError").textContent = "❌ Login failed. Please try again.";
-        });
-    }
+  function handleLogin() {
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value.trim();
+    const error = document.getElementById("loginError");
+
+    fetch(`${API_BASE_URL}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        error.textContent = data.error;
+        error.classList.remove("hidden");
+      } else {
+        // ✅ CORRECT STORAGE
+        localStorage.setItem("currentUser", JSON.stringify(data.user));
+        localStorage.setItem("clientId", data.user.clientId);
+
+        window.location.href = "assessment.html";
+      }
+    })
+    .catch(() => {
+      error.textContent = "❌ Login failed. Please try again.";
+      error.classList.remove("hidden");
+    });
+  }
   </script>
 </body>
 </html>
