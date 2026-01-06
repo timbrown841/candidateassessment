@@ -36,8 +36,9 @@
   <p id="roleError" class="hidden">☝️ Please select a role</p>
 
       <!-- ✅ Logout button moved here -->
-  <button onclick="logout()" class="btn-blue mt-4">Logout</button>
-</div>
+      <div style="margin-top: 20px;">
+        <button onclick="logout()" class="btn-blue mt-4">Logout</button>
+      </div>
 
     <img id="logo" />
     <div id="instructions"></div>
@@ -66,7 +67,7 @@
   const storedUser = localStorage.getItem("currentUser");
     const clientId = localStorage.getItem("clientId");
     // ✅ Fetch Client ID
-fetch(`/api/client/${clientId}`)
+fetch(`${API_BASE_URL}/api/client/${clientId}`)
   .then(res => res.json())
   .then(data => {
     document.querySelector('body').style.backgroundColor = data.primaryColor;
@@ -164,15 +165,10 @@ fetch(`/api/client/${clientId}`)
   .then(res => res.json())
   .then(data => {
     loadQuestions(data);
+    loadedQuestions = data;
     document.getElementById("roleSelection").classList.add("hidden");
     document.getElementById("assessmentSection").classList.remove("hidden");
   });
-
-  // ✅ Add this logout function
-  function logout() {
-  localStorage.removeItem("currentUser");
-  window.location.href = "login.html";
-  }
 
 function loadQuestions(questions) {
   const container = document.getElementById("questions");
@@ -263,6 +259,12 @@ document.getElementById("assessmentForm").addEventListener("submit", function (e
   });
 });
 
+// ✅ Add this logout function
+  function logout() {
+  localStorage.removeItem("currentUser");
+  window.location.href = "login.html";
+  }
+    
 </script>
 </body>
 </html>
