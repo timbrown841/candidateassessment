@@ -64,6 +64,15 @@
   let currentUser = null;
   let selectedRole = "";
   let loadedQuestions = [];
+
+const clientId = localStorage.getItem("clientId");
+
+if (!clientId) {
+  alert("Client configuration missing. Please log in again.");
+  localStorage.clear();
+  window.location.href = "login.html";
+  return;
+}
   
   document.addEventListener("DOMContentLoaded", () => {
     console.log("📦 DOM loaded");
