@@ -251,6 +251,8 @@ app.post('/api/login', async (req, res) => {
     clientId: user.clientId
   }
 });
+  
+});
 
 // ✅ Serve Branding to Frontend
 app.get('/api/client/:clientId', async (req, res) => {
@@ -415,6 +417,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
