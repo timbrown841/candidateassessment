@@ -165,12 +165,15 @@ app.post('/api/register', async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   
-  const newUser = new User({
+  const DEFAULT_CLIENT_ID = process.env.DEFAULT_CLIENT_ID;
+
+const newUser = new User({
   name,
   email,
   password: hashedPassword,
-  verifyToken
-  });
+  verifyToken,
+  clientId: DEFAULT_CLIENT_ID
+});
 
   await newUser.save();
 
@@ -239,7 +242,14 @@ app.post('/api/login', async (req, res) => {
     return res.status(403).json({ error: 'Email not verified' });
   }
 
-  res.json({ message: 'Login successful', user });
+  res.json({
+  message: 'Login successful',
+  user: {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    clientId: user.clientId
+  }
 });
 
 // ✅ Serve Branding to Frontend
@@ -405,6 +415,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
