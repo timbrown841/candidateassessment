@@ -59,6 +59,8 @@
 </div>
 
 <script>
+  const API_BASE_URL = 'https://candidateassessment.onrender.com';
+  
   let currentUser = null;
   let selectedRole = "";
   let loadedQuestions = [];
@@ -78,7 +80,7 @@ fetch(`${API_BASE_URL}/api/client/${clientId}`)
     document.body.style.backgroundColor = data.primaryColor;
     document.querySelector('#logo').src = data.logoUrl;
     document.querySelector('#instructions').textContent = data.instructions;
-  });
+  })
     .catch(err => {
     console.error("❌ Branding fetch failed", err);
     });
@@ -86,9 +88,7 @@ fetch(`${API_BASE_URL}/api/client/${clientId}`)
   currentUser = JSON.parse(storedUser);
   document.getElementById("roleSelection").classList.remove("hidden");
 });
-
-  const API_BASE_URL = 'https://candidateassessment.onrender.com';
-
+  
   const questionBank = {
   "Infrastructure Engineer": [
       { type: "mcq", question: "Which RAID level provides mirroring?", options: ["RAID 0", "RAID 1", "RAID 5", "RAID 10"], answer: "RAID 1" },
