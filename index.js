@@ -12,7 +12,10 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // 2️⃣ middleware
 app.use(cors({
-  origin: 'https://timbrown841.github.io'
+  origin: [
+    'https://timbrown841.github.io',
+    'http://localhost:5500'
+    ]
 }));
 app.use(express.json()); 
 
@@ -404,3 +407,4 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
