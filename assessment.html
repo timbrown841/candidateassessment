@@ -184,7 +184,6 @@ function loadQuestions(questions) {
     label.appendChild(span);
     wrapper.appendChild(label);
   });
-}
     } else {
       const textarea = document.createElement('textarea');
       textarea.name = `q${index}`;
@@ -249,7 +248,7 @@ document.getElementById("assessmentForm").addEventListener("submit", function (e
   .catch(() => {
     resultDiv.innerHTML = `<p>❌ There was an error submitting your assessment.</p>`;
   });
-}):
+});
 
 // ✅ Add this logout function
   function logout() {
