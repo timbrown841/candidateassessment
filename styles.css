@@ -228,14 +228,14 @@ input[type="radio"] {
   accent-color: #2c3e50; /* Optional: style the radio button */
 }
 
-.option-row {
+/*.option-row {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
   font-size: 16px;
   white-space: nowrap;        /* Prevents text from wrapping */
-}
+}*/
 
 /* ========== To improve spacing/appearance ========== */
 #submissions a {
@@ -249,4 +249,16 @@ input[type="radio"] {
 #submissions a:hover {
   text-decoration: underline;
   color: #0c369c;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  line-height: 1.4;
+  text-align: left;
+  width: 100%;
 }
