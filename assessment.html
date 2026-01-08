@@ -15,6 +15,19 @@
       width: 100%;
     }
   }
+    /* ✅ Add this below */
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  .radio-option input[type="radio"] {
+    margin: 0;
+    transform: scale(1.2);
+  }
 </style>
 </head>
 <body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
@@ -155,17 +168,23 @@ function loadQuestions(questions) {
     }
 
     if (q.type === "mcq") {
-      q.options.forEach(opt => {
-        const label = document.createElement('label');
-        const radio = document.createElement('input');
-        radio.type = 'radio';
-        radio.name = `q${index}`;
-        radio.value = opt;
+  q.options.forEach(opt => {
+    const label = document.createElement('label');
+    label.className = 'radio-option';  // ← Add this line for styling
 
-        label.appendChild(radio);
-        label.append(opt);
-        wrapper.appendChild(label);
-      });
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = `q${index}`;
+    radio.value = opt;
+
+    const span = document.createElement('span'); // Use a span for clean text separation
+    span.textContent = opt;
+
+    label.appendChild(radio);
+    label.appendChild(span);
+    wrapper.appendChild(label);
+  });
+}
     } else {
       const textarea = document.createElement('textarea');
       textarea.name = `q${index}`;
