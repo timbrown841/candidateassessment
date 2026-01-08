@@ -20,7 +20,7 @@
 <body style="background: url('interview_bkgrd.jpg') no-repeat center center fixed; background-size: cover;">
   <div class="card container">
     <h1 class="centered mb-4">Candidate Portal</h1>
-
+    
     <!-- 🎯 Role Selection -->
     <div id="roleSelection" class="hidden">
       <h2>Select Job Role</h2>
@@ -56,6 +56,7 @@
     <div class="centered mt-4">
   <a href="pricing.html" class="btn-blue">Pricing</a>
 </div>
+     <img id="logo" src="" alt="Logo" />
 
 <script>
   const API_BASE_URL = 'https://candidateassessment.onrender.com';
@@ -84,8 +85,17 @@ fetch(`${API_BASE_URL}/api/client/${clientId}`)
   .then(data => {
     console.log("🎨 Client branding:", data);
     document.body.style.backgroundColor = data.primaryColor;
-    document.querySelector('#logo').src = data.logoUrl;
-    document.querySelector('#instructions').textContent = data.instructions;
+    
+    const logo = document.querySelector('#logo');
+if (logo && data.logoUrl) {
+  logo.src = data.logoUrl;
+}
+
+const instructions = document.querySelector('#instructions');
+if (instructions && data.instructions) {
+  instructions.textContent = data.instructions;
+}
+
   })
     .catch(err => {
     console.error("❌ Branding fetch failed", err);
