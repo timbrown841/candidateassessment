@@ -19,6 +19,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
+  text-align: left;
 }
 
 .card {
@@ -27,6 +28,7 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 24px;
   margin-bottom: 24px;
+  text-align: left;
 }
 
 .centered {
