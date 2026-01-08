@@ -199,7 +199,7 @@ document.getElementById("assessmentForm").addEventListener("submit", function (e
       const selected = document.querySelector(`input[name="q${index}"]:checked`);
       if (selected) value = selected.value;
 
-      if (value === q.answer) score++;
+      if (value === q.correctAnswer) score++;
     } else {
       const textarea = document.querySelector(`textarea[name="q${index}"]`);
       if (textarea) value = textarea.value;
