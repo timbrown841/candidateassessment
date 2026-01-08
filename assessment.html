@@ -192,21 +192,19 @@ document.getElementById("assessmentForm").addEventListener("submit", function (e
   let score = 0, total = 0;
   const responses = questions.map((q, index) => {
     const input = document.forms["assessmentForm"].elements[`q${index}`];
-    
     let value = '';
-    if (input) {
-      if (input.value !== undefined) {
-        value = input.value;
-      } else {
-        const textarea = input.querySelector('textarea');
-        if (textarea) value = textarea.value;
-      }
-    }
     
     if (q.type === "mcq") {
       total++;
+      const selected = document.querySelector(`input[name="q${index}"]:checked`);
+      if (selected) value = selected.value;
+
       if (value === q.answer) score++;
+    } else {
+      const textarea = document.querySelector(`textarea[name="q${index}"]`);
+      if (textarea) value = textarea.value;
     }
+
     return { question: q.question, type: q.type, answer: value };
   });
 
