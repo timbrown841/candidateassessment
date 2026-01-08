@@ -17,12 +17,13 @@
   }
     /* ✅ Add this below */
   .radio-option {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-    font-size: 16px;
-  }
+  display: flex;
+  align-items: flex-start; /* ← was 'center', now aligns radio button with top of text */
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 1.4; /* Helps spacing when text wraps */
+}
 
   .radio-option input[type="radio"] {
     margin: 0;
