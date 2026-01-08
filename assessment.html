@@ -169,21 +169,26 @@ function loadQuestions(questions) {
     }
 
     if (q.type === "mcq") {
-  q.options.forEach(opt => {
-    const label = document.createElement('label');
-    label.className = 'radio-option';  // ← Add this line for styling
-
+      q.options.forEach(opt => {
+        const div = document.createElement('div');
+        div.style.marginBottom = '10px';
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        
     const radio = document.createElement('input');
     radio.type = 'radio';
     radio.name = `q${index}`;
     radio.value = opt;
+    radio.style.marginRight = '8px';
 
-    const span = document.createElement('span'); // Use a span for clean text separation
-    span.textContent = opt;
+    const label = document.createElement('label');
+    label.textContent = opt;
+    label.style.fontSize = '16px';
+    label.style.cursor = 'pointer';
 
-    label.appendChild(radio);
-    label.appendChild(span);
-    wrapper.appendChild(label);
+    div.appendChild(radio);
+    div.appendChild(label);
+    wrapper.appendChild(div);
   });
     } else {
       const textarea = document.createElement('textarea');
