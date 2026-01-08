@@ -251,3 +251,15 @@ input[type="radio"] {
   color: #0c369c;
 }
 
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.radio-option input[type="radio"] {
+  vertical-align: middle;
+}
+
