@@ -173,16 +173,19 @@ function loadQuestions(questions) {
         
         const span = document.createElement('span');
         span.textContent = opt;
-
-    const radio = document.createElement('input');
-    radio.type = 'radio';
-    radio.name = `q${index}`;
-    radio.value = opt;
+        span.style.fontSize = '16px';
+        span.style.cursor = 'pointer';
+        
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = `q${index}`;
+        radio.value = opt;
+        radio.style.marginLeft = '8px'; // space between text and radio
 
     // Append in this order: Text first, then radio
-    label.appendChild(span);
-    label.appendChild(radio);
-    wrapper.appendChild(label);
+        label.appendChild(span);
+        label.appendChild(radio);
+        wrapper.appendChild(label);
       });
     } else {
       const textarea = document.createElement('textarea');
