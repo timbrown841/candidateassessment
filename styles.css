@@ -264,3 +264,9 @@ input[type="radio"] {
   text-align: left;
   width: 100%;
 }
+
+.logo-top-left {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
