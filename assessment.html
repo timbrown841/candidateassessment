@@ -169,17 +169,18 @@ function loadQuestions(questions) {
         const label = document.createElement('label');
         label.className = 'radio-option';
         
-        const radio = document.createElement('input');
-        radio.type = 'radio';
-        radio.name = `q${index}`;
-        radio.value = opt;
-        
         const span = document.createElement('span');
         span.textContent = opt;
-        
-        label.appendChild(radio);
-        label.appendChild(span);
-        wrapper.appendChild(label);
+
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = `q${index}`;
+    radio.value = opt;
+
+    // Append in this order: Text first, then radio
+    label.appendChild(span);
+    label.appendChild(radio);
+    wrapper.appendChild(label);
       });
     } else {
       const textarea = document.createElement('textarea');
