@@ -266,12 +266,11 @@ input[type="radio"] {
 .radio-option {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 10px;
+  margin-bottom: 10px;
   font-size: 16px;
-  line-height: 1.4;
   text-align: left;
-  white-space: normal;
+  flex-wrap: wrap;
 }
 
 .radio-option input[type="radio"] {
