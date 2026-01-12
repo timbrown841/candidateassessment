@@ -31,6 +31,11 @@ body {
   text-align: left;
 }
 
+/* 👇 Add this BELOW .container and .card */
+.card.container {
+  max-width: 800px; /* ✅ This limits the content width */
+}
+
 .centered {
   text-align: center;
 }
