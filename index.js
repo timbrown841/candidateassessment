@@ -348,18 +348,23 @@ app.get('/api/questions/:role/:clientId', async (req, res) => {
   try {
     const { role, clientId } = req.params;
 
-    // Find the question set for this role and client
-    const doc = await Question.findOne({ role, clientId });
+    // Try to find by both role and clientId
+    let doc = await Question.findOne({ role, clientId });
 
-    if (!doc || !Array.isArray(doc.questions)) {
-      return res.status(404).json({ error: "No questions found for this role and client." });
+    // If not found, try to find by just role
+    if (!doc) {
+      console.warn(`⚠️ No questions for clientId ${clientId}, falling back to default`);
+      doc = await Question.findOne({ role });
     }
 
-    // ✅ Send only the questions array
+    if (!doc || !Array.isArray(doc.questions)) {
+      return res.status(404).json({ error: "No questions found for this role." });
+    }
+
     res.json(doc.questions);
   } catch (err) {
-    console.error("❌ Error fetching questions:", err);
-    res.status(500).json({ error: "Server error while fetching questions." });
+    console.error("❌ Server error while fetching questions:", err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -430,6 +435,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
