@@ -264,13 +264,13 @@ input[type="radio"] {
 }
 
 .radio-option {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
   font-size: 16px;
   text-align: left;
-  white-space: nowrap; /* 👈 Prevent text from wrapping */
+  flex-wrap: wrap;
 }
 
 .radio-option input[type="radio"] {
@@ -280,7 +280,8 @@ input[type="radio"] {
 }
 
 .radio-option span {
-   white-space: nowrap; /* 👈 Prevent text like "Routes" from breaking into R-o-u-t-e-s */
+  word-break: break-word;
+  max-width: 600px;
 }
 
 .logo-top-left {
