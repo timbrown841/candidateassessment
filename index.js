@@ -345,14 +345,22 @@ app.get('/api/submission/:id', requireAdmin, async (req, res) => {
 
 // ✅ API to Fetch Questions for Logged-in User
 app.get('/api/questions/:role/:clientId', async (req, res) => {
-  const { role, clientId } = req.params;
-  const doc = await Question.findOne({ role, clientId });
+  try {
+    const { role, clientId } = req.params;
 
-  if (!doc || !doc.questions) {
-    return res.status(404).json({ error: "No questions found." });
+    // Find the question set for this role and client
+    const doc = await Question.findOne({ role, clientId });
+
+    if (!doc || !Array.isArray(doc.questions)) {
+      return res.status(404).json({ error: "No questions found for this role and client." });
+    }
+
+    // ✅ Send only the questions array
+    res.json(doc.questions);
+  } catch (err) {
+    console.error("❌ Error fetching questions:", err);
+    res.status(500).json({ error: "Server error while fetching questions." });
   }
-
-  res.json(doc.questions); // Send just the array
 });
 
 // ✅ Stripe Checkout API
@@ -422,6 +430,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
