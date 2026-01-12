@@ -255,12 +255,13 @@ input[type="radio"] {
 
 .radio-option {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  font-size: 16px;
+  justify-content: flex-start;
+  gap: 8px;
   margin-bottom: 12px;
-  width: 100%;
+  font-size: 16px;
+  line-height: 1.4;
+  text-align: left;
 }
 
 .radio-option input[type="radio"] {
