@@ -258,6 +258,7 @@ input[type="radio"] {
   color: #0c369c;
 }
 
+/* ========== To improve spacing for questions ========== */
 .radio-row {
   display: block;
   margin-bottom: 10px;
@@ -287,5 +288,39 @@ input[type="radio"] {
 .logo-top-left {
   text-align: left;
   margin-bottom: 20px;
+}
+
+/* ========== To improve admin page layout ========== */
+.submission-card {
+  background: #ffffffdd;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.submission-card h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.submission-meta {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.view-button {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #0056b3;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.view-button:hover {
+  background: #004494;
 }
 
