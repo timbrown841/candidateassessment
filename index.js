@@ -348,22 +348,18 @@ app.get('/api/questions/:role/:clientId', async (req, res) => {
   try {
     const { role, clientId } = req.params;
 
-    // Try to find by both role and clientId
-    let doc = await Question.findOne({ role, clientId });
+    const questions = await Question.find({
+      role,
+      clientId: new mongoose.Types.ObjectId(clientId)
+    });
 
-    // If not found, try to find by just role
-    if (!doc) {
-      console.warn(`⚠️ No questions for clientId ${clientId}, falling back to default`);
-      doc = await Question.findOne({ role });
-    }
-
-    if (!doc || !Array.isArray(doc.questions)) {
+    if (!questions || questions.length === 0) {
       return res.status(404).json({ error: "No questions found for this role." });
     }
 
-    res.json(doc.questions);
+    res.json(questions);
   } catch (err) {
-    console.error("❌ Server error while fetching questions:", err);
+    console.error("❌ Error fetching questions:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -435,6 +431,7 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 
 
