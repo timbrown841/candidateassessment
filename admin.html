@@ -89,13 +89,27 @@
     data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     data.forEach(entry => {
-      const link = document.createElement('a');
-      link.href = `submission.html?id=${entry._id}`;
-      link.textContent = `${entry.name} — ${new Date(entry.date).toLocaleString()}`;
-      link.className = "block mb-3 text-blue-700 font-medium hover:underline";
+  const card = document.createElement('div');
+  card.className = 'submission-card';
 
-      container.appendChild(link);
-    });
+  const title = document.createElement('h3');
+  title.textContent = entry.name;
+
+  const meta = document.createElement('p');
+  meta.className = 'submission-meta';
+  meta.textContent = `${entry.role || 'Unknown role'} — ${new Date(entry.date).toLocaleString()}`;
+
+  const viewLink = document.createElement('a');
+  viewLink.href = `submission.html?id=${entry._id}`;
+  viewLink.textContent = 'View Submission';
+  viewLink.className = 'view-button';
+
+  card.appendChild(title);
+  card.appendChild(meta);
+  card.appendChild(viewLink);
+
+  container.appendChild(card);
+});
   })
   .catch(err => {
     console.error(err);
@@ -114,6 +128,7 @@
   </script>
 </body>
 </html>
+
 
 
 
