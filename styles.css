@@ -324,3 +324,65 @@ input[type="radio"] {
   background: #004494;
 }
 
+/* === Assessment Layout Enhancements === */
+
+#questions > div {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+/* Style each option row */
+.radio-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+/* Label and radio alignment */
+.radio-option {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Add spacing between radio and text */
+.radio-option input[type="radio"] {
+  margin-right: 12px;
+}
+
+/* Size and accent color for radio buttons */
+input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #007bff; /* Optional: blue highlight */
+}
+
+/* Optional: hover effect */
+.radio-option:hover {
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+/* Space between options */
+.radio-row:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .radio-row {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .radio-option {
+    font-size: 15px;
+  }
+}
+
+
