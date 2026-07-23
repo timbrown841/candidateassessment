@@ -5,10 +5,13 @@
   padding: 0;
 }
 
-body.login-theme {
-  background: radial-gradient(circle at 20% 20%, #1e2a47, #0f0f0f 60%),
-              linear-gradient(135deg, #1a1a1a, #0d0d0d) !important;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('interview_bkgrd.jpg') no-repeat center center fixed;
   background-size: cover;
+  padding: 24px;
+  min-height: 100vh;
+  color: #1f2937;
 }
 
 /* ========== Containers & Layout ========== */
@@ -559,11 +562,3 @@ input[type="radio"] {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-/* Force login theme to override global body background */
-body.login-theme {
-  background: radial-gradient(circle at 20% 20%, #1e2a47, #0f0f0f 60%),
-              linear-gradient(135deg, #1a1a1a, #0d0d0d) !important;
-  background-size: cover;
-}
-
