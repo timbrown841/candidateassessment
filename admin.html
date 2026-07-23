@@ -6,56 +6,33 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="admin-theme">
-   <!-- Top Navigation Bar -->
-  <header class="admin-topbar">
-    <div class="admin-logo">
-      <img src="AssessIQ_logoT.png" alt="AssessIQ Logo">
-    </div>
-    <div class="admin-top-actions">
-      <span class="admin-user">Admin Panel</span>
-      <button class="admin-logout-btn" onclick="logout()">Logout</button>
-    </div>
-  </header>
+  <div class="card container">
 
-  <!-- Hero Section -->
-  <section class="admin-hero">
-    <h1>Assessment Dashboard</h1>
-    <p>Manage candidate submissions with a premium, streamlined interface.</p>
-  </section>
+     <div class="logo-top-left">
+      <a href="login.html">
+  <img id="logo" src="AssessIQ_logoT.png" alt="AssessIQ Logo" style="max-width: 200px; cursor: pointer;" />
+      </a>
+</div>
+    
+  <h1 class="centered mb-4">Admin Panel</h1>
+  <!-- 🔐 Login Form -->
+  <div id="login">
+    <h2>Login Required</h2>
+    <input type="text" id="username" placeholder="Username"
+           autocapitalize="off" autocomplete="off"/>
+    <input type="password" id="password" placeholder="Password"
+           autocapitalize="off" autocomplete="off"/>
+    <button onclick="checkLogin()">Login</button>
+    <p id="login-error" class="alert-error hidden">❌ Invalid credentials</p>
+  </div>
 
-  <!-- Main Content Wrapper -->
-  <div class="admin-wrapper">
-
-    <!-- Sidebar Navigation -->
-    <aside class="admin-sidebar">
-      <nav>
-        <a class="nav-item active">📄 Submissions</a>
-        <a class="nav-item">👤 Candidates</a>
-        <a class="nav-item">🏢 Clients</a>
-        <a class="nav-item">⚙️ Settings</a>
-      </nav>
-    </aside>
-
-    <!-- Main Panel -->
-    <main class="admin-main">
-
-      <!-- Login Panel -->
-      <div id="login" class="admin-panel glass-panel">
-        <h2>Admin Login</h2>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="checkLogin()">Login</button>
-        <p id="login-error" class="alert-error hidden">❌ Invalid credentials</p>
-      </div>
-
-      <!-- Submissions Panel -->
-      <div id="submissions-container" class="admin-panel glass-panel hidden">
-        <h2>Submitted Assessments</h2>
-        <div id="submissions">Loading...</div>
-      </div>
+  <!-- 📋 Submissions Display -->
+  <div id="submissions-container" class="hidden">
+    <h2>Submitted Assessments</h2>
+    <div id="submissions">Loading...</div>
+  </div>
      <!-- 🔓 Logout Button -->
   <button onclick="logout()" style="margin-top: 20px;">Logout</button>
-    </main>
   </div>
 
   <script>
@@ -151,9 +128,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
