@@ -566,7 +566,7 @@ input[type="radio"] {
 }
 
 /* ==========================================
-   SAMSUNG GALAXY Z FOLD8 LOGIN THEME
+   PREMIUM LOGIN THEME (MATCHES ADMIN THEME)
    ========================================== */
 
 .login-theme {
@@ -574,8 +574,9 @@ input[type="radio"] {
   padding: 40px 20px;
   font-family: 'Inter', sans-serif;
 
-  background: radial-gradient(circle at 20% 20%, #1b2b4d, #0a0a0f 60%),
-              linear-gradient(135deg, #0f0f15, #1a1a24);
+  /* Same gradient as admin */
+  background: radial-gradient(circle at 20% 20%, #1e2a47, #0f0f0f 60%),
+              linear-gradient(135deg, #1a1a1a, #0d0d0d);
 
   position: relative;
   overflow-x: hidden;
@@ -589,7 +590,7 @@ input[type="radio"] {
   left: -150px;
   width: 450px;
   height: 450px;
-  background: rgba(0, 140, 255, 0.25);
+  background: rgba(76, 139, 245, 0.25);
   filter: blur(180px);
   border-radius: 50%;
   z-index: 0;
@@ -608,15 +609,15 @@ input[type="radio"] {
   z-index: 0;
 }
 
-/* Login card */
+/* Glass card */
 .login-theme .card.container {
-  max-width: 520px;
-  margin: 100px auto;
+  max-width: 480px;
+  margin: 120px auto;
   padding: 45px;
-  border-radius: 28px;
+  border-radius: 26px;
 
   background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(28px);
+  backdrop-filter: blur(26px);
 
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55),
               inset 0 0 40px rgba(255, 255, 255, 0.05);
@@ -664,8 +665,8 @@ input[type="radio"] {
 }
 .login-theme input:focus {
   background: rgba(255,255,255,0.22);
-  border-color: rgba(0,140,255,0.6);
-  box-shadow: 0 0 0 3px rgba(0,140,255,0.25);
+  border-color: rgba(76,139,245,0.6);
+  box-shadow: 0 0 0 3px rgba(76,139,245,0.25);
 }
 
 /* Buttons */
@@ -676,7 +677,7 @@ input[type="radio"] {
   border: none;
   border-radius: 14px;
 
-  background: linear-gradient(135deg, #008cff, #6a5cff);
+  background: linear-gradient(135deg, #4c8bf5, #6a5cff);
   color: #fff;
   font-size: 18px;
   font-weight: 600;
@@ -684,7 +685,7 @@ input[type="radio"] {
   transition: 0.3s;
 }
 .login-theme button:hover {
-  background: linear-gradient(135deg, #1aa0ff, #8b6cff);
+  background: linear-gradient(135deg, #6aa0ff, #8b6cff);
   transform: translateY(-3px);
 }
 
@@ -698,46 +699,8 @@ input[type="radio"] {
   color: #ffd6d6;
 }
 
-/* Submission cards */
-.login-theme .submission-card {
-  background: rgba(255,255,255,0.12);
-  padding: 24px;
-  border-radius: 18px;
-  margin-bottom: 20px;
-  transition: 0.3s;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-}
-.login-theme .submission-card:hover {
-  background: rgba(255,255,255,0.18);
-  transform: translateY(-4px);
-}
-
-/* Submission meta */
-.login-theme .submission-meta {
-  color: #cfd6e6;
-  font-size: 15px;
-  margin-bottom: 14px;
-}
-
-/* View button */
-.login-theme .view-button {
-  display: inline-block;
-  padding: 10px 16px;
-  background: #008cff;
-  color: #fff;
-  border-radius: 10px;
-  text-decoration: none;
-  transition: 0.3s;
-}
-.login-theme .view-button:hover {
-  background: #1aa0ff;
-}
-
 /* Fade-in animation */
 @keyframes loginFadeIn {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
