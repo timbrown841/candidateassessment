@@ -385,16 +385,20 @@ input[type="radio"] {
   }
 }
 
-/* Global */
-body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
+/* ============================
+   PREMIUM ADMIN THEME (ISOLATED)
+   ============================ */
+
+.admin-theme {
   background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
   color: #fff;
+  min-height: 100vh;
+  padding: 24px;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Centered card */
-.card.container {
+/* Centered glass card */
+.admin-theme .card.container {
   max-width: 480px;
   margin: 80px auto;
   padding: 40px;
@@ -402,28 +406,30 @@ body {
   backdrop-filter: blur(18px);
   background: rgba(255, 255, 255, 0.06);
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  animation: fadeIn 0.8s ease;
+  animation: adminFadeIn 0.8s ease;
 }
 
 /* Logo */
-.logo-top-left img {
+.admin-theme .logo-top-left img {
   width: 160px;
   opacity: 0.9;
   transition: 0.3s;
 }
-.logo-top-left img:hover {
+.admin-theme .logo-top-left img:hover {
   opacity: 1;
 }
 
 /* Headings */
-h1, h2 {
+.admin-theme h1,
+.admin-theme h2 {
   text-align: center;
   font-weight: 600;
   letter-spacing: 0.5px;
+  color: #fff;
 }
 
 /* Inputs */
-input {
+.admin-theme input {
   width: 100%;
   padding: 14px;
   margin: 12px 0;
@@ -435,12 +441,12 @@ input {
   outline: none;
   transition: 0.3s;
 }
-input:focus {
+.admin-theme input:focus {
   background: rgba(255,255,255,0.18);
 }
 
 /* Buttons */
-button {
+.admin-theme button {
   width: 100%;
   padding: 14px;
   margin-top: 10px;
@@ -453,35 +459,56 @@ button {
   cursor: pointer;
   transition: 0.3s;
 }
-button:hover {
+.admin-theme button:hover {
   background: #6aa0ff;
   transform: translateY(-2px);
 }
 
-/* Error */
-.alert-error {
+/* Error message */
+.admin-theme .alert-error {
   background: rgba(255, 0, 0, 0.2);
   padding: 10px;
   border-radius: 10px;
   text-align: center;
   margin-top: 10px;
+  color: #ffb3b3;
 }
 
 /* Submission cards */
-.submission-card {
+.admin-theme .submission-card {
   background: rgba(255,255,255,0.08);
   padding: 20px;
   border-radius: 14px;
   margin-bottom: 15px;
   transition: 0.3s;
+  color: #fff;
 }
-.submission-card:hover {
+.admin-theme .submission-card:hover {
   background: rgba(255,255,255,0.12);
   transform: translateY(-3px);
 }
 
-/* Animations */
-@keyframes fadeIn {
+/* Submission meta */
+.admin-theme .submission-meta {
+  color: #ccc;
+}
+
+/* View button */
+.admin-theme .view-button {
+  display: inline-block;
+  padding: 10px 16px;
+  background: #4c8bf5;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.admin-theme .view-button:hover {
+  background: #6aa0ff;
+}
+
+/* Fade-in animation */
+@keyframes adminFadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
