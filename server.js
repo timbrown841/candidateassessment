@@ -278,10 +278,6 @@ const jwt = require('jsonwebtoken');
 app.post('/api/admin/login', async (req, res) => {
   const { username, password } = req.body;
 
-  console.log("🟡 Admin login attempt:", { username, password });
-  console.log("🟡 Env ADMIN_USERNAME:", process.env.ADMIN_USERNAME);
-  console.log("🟡 Env ADMIN_PASSWORD_HASH:", process.env.ADMIN_PASSWORD_HASH?.slice(0, 20) + '...');
-
   if (username !== process.env.ADMIN_USERNAME) {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
@@ -291,10 +287,7 @@ app.post('/api/admin/login', async (req, res) => {
     process.env.ADMIN_PASSWORD_HASH
   );
 
-  console.log("🟡 bcrypt.compare result:", isValid);
-
   if (!isValid) {
-    console.log("❌ Password/hash mismatch");
     return res.status(401).json({ error: 'Invalid credentials' });
   }
 
