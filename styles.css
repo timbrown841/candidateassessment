@@ -446,3 +446,23 @@ body.pricing-theme .pricing-card:hover {
   background: rgba(255, 255, 255, 0.16);
   transform: translateY(-6px);
 }
+
+/* ==========================================
+   GLASS EFFECT FOR ASSESSMENT CARD (SAFE)
+   ========================================== */
+
+body.assessment-theme .card.container {
+  background: rgba(255, 255, 255, 0.10);   /* transparent glass */
+  backdrop-filter: blur(26px);            /* glass blur */
+  -webkit-backdrop-filter: blur(26px);    /* Safari support */
+  border-radius: 26px;
+
+  padding: 45px;
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.55),       /* outer shadow */
+    inset 0 0 40px rgba(255, 255, 255, 0.05); /* inner glow */
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  z-index: 2;
+}
