@@ -531,7 +531,7 @@ body.reset-theme .card.container {
    GLASS EFFECT FOR VERIFIED PAGE (SAFE)
    ========================================== */
 
-body.verified-theme .container.centered{
+body.verified-theme .card {
   background: rgba(255, 255, 255, 0.10);   /* transparent glass */
   backdrop-filter: blur(26px);            /* glass blur */
   -webkit-backdrop-filter: blur(26px);    /* Safari support */
