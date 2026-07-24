@@ -12,7 +12,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // 2️⃣ middleware
 app.use(cors({
-  origin: 'https://timbrown841.github.io',
+  origin: 'https://assessiq.co.uk',
   credentials: false
 }));
 app.use(express.json()); 
@@ -88,7 +88,7 @@ app.post('/api/request-password-reset', async (req, res) => {
   user.resetTokenExpiry = Date.now() + 3600000; // 1 hour
   await user.save();
 
-  const resetLink = `https://timbrown841.github.io/candidateassessment/reset-password.html?token=${token}`;
+  const resetLink = `https://assessiq.co.uk/reset-password.html?token=${token}`;
 
   try {
     await axios.post('https://api.brevo.com/v3/smtp/email', {
@@ -221,7 +221,7 @@ app.get('/api/verify-email', async (req, res) => {
   user.verifyToken = undefined;
   await user.save();
 
-  res.redirect('https://timbrown841.github.io/candidateassessment/verified.html');
+  res.redirect('https://assessiq.co.uk/verified.html');
 });
 
 // ✅ Login API
@@ -388,8 +388,8 @@ app.post('/api/checkout', async (req, res) => {
           quantity: 1
         }
       ],
-      success_url: 'https://timbrown841.github.io/candidateassessment/success.html',
-      cancel_url: 'https://timbrown841.github.io/candidateassessment/cancel.html'
+      success_url: 'https://assessiq.co.uk/success.html',
+      cancel_url: 'https://assessiq.co.uk/cancel.html'
     });
 
     res.json({ url: session.url });
